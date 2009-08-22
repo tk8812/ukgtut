@@ -1,5 +1,27 @@
 #include "FormatedAnimationNode.h"
 
+/*
+
+이 예제를 통해 배울수있는것들에 대한 간략한언급..
+
+1. 억지로 구현해본 메뉴처리
+원 제작자는 의도 했는지는 모르겠지만
+항상성기능중 enum 형을 이용해서 메뉴를 구현해서 일리히트에디터의 추가 기능에 대한 유아이의 가능성에 대해서 실험을 해봤다.
+
+cmd라는 열거형항목을 만들어서 몇가지 동작을 추가했다.
+joint 조인트노드 보여주기
+addAni 새로운 애니메이션 추가하기
+
+초기상태는 ---로있다가 드롭다운메뉴를 선택해주면 desierialze함수가 호출되면서
+cmd 변수를 체크해서 해당하는 동작을 수행하고 cmd내용은 다시 ---으로 해놓으면 마치 해당버튼을 
+클릭했을때(또는 드롭다운 메뉴선택 메씨지를 처리 하는 것과 유사한 동작을 구현할수있었다.
+
+2.동적 데이터 확장 또는 형식 변경
+
+
+
+*/
+
 namespace irr 
 {
 	namespace scene
@@ -8,42 +30,26 @@ namespace irr
 		{
 			const char *CFormatedAnimationNode::Name = "FormatedAnimationNode";
 
-			const c8* CFormatedAnimationNode::ActionNames[] =			
-			{
-				"Stand",
-				"Walk",
-				"Attack",
-				"damage",
-				"die"
-			};			
-
 			const c8* CFormatedAnimationNode::CmdListNames[] =			
 			{
 				"---",
-				"joint"				
+				"joint",
+				"addAni",
+				"delAni",
+				0
 			};	
 
 			CFormatedAnimationNode::CFormatedAnimationNode(ISceneNode* parent, ISceneManager* mgr, s32 id)
 				: ISceneNode(parent, mgr, id),
-				m_CurAnimation(ActionNames[0]),
+				m_CurAnimation(""),
 				m_TargetNodeName("body"),
 				m_CurCmd("---"),
-				m_status(0)
+				m_strCmdParam("")				
 			{
 #ifdef _DEBUG
 				setDebugName("CFormatedAnimationNode");
 #endif
-				setAutomaticCulling(scene::EAC_OFF);				
-
-				//액션정보 초기화
-				irr::s32 i;
-				irr::s32 AniNum = sizeof(CFormatedAnimationNode::ActionNames)/sizeof(c8*);
-				for(i=0;i< AniNum ; i++)
-				{
-					m_mapActionDesc[std::string(ActionNames[i])] = irr::core::vector3df(0,0,0);
-				}
-
-				
+				setAutomaticCulling(scene::EAC_OFF);
 			}
 
 
@@ -86,6 +92,14 @@ namespace irr
 				nb->m_mapActionDesc = m_mapActionDesc;
 				nb->m_TargetNodeName = m_TargetNodeName;
 
+				nb->m_strActionList = m_strActionList;
+				nb->m_strwActionList = m_strwActionList;
+				nb->m_ActionList =m_ActionList;
+
+				nb->m_CurCmd = m_CurCmd;
+				nb->m_strCmdParam = m_strCmdParam;
+
+
 				nb->drop();
 				return nb;
 			}
@@ -94,149 +108,137 @@ namespace irr
 			void CFormatedAnimationNode::serializeAttributes(io::IAttributes* out, io::SAttributeReadWriteOptions* options) const
 			{
 				ISceneNode::serializeAttributes(out, options);				
+
+				out->addArray("actionlist",m_strwActionList);
 				
 				out->addEnum("cmd",m_CurCmd.c_str(),CFormatedAnimationNode::CmdListNames);
-				out->addEnum("animation",m_CurAnimation.c_str(),CFormatedAnimationNode::ActionNames);	
-				out->addString("target",m_TargetNodeName.c_str());
-				
-				
-				/*if(m_mapActionDesc.size())
-				{
-					out->addEnum("animation",
-						m_CurAnimation.c_str(),
-						m_EnumActionList						
-					);
-				}*/
-				
-				//out->addBool("add Action",m_bAddActionBtn);				
-				//out->addString("add Action Nanme",m_strAddActionName.c_str());
+				out->addString("cmd Param1",m_strCmdParam.c_str());
+				if(m_ActionList.size() > 1)
+				{					
+					out->addEnum("animation",m_CurAnimation.c_str(),(char **)&m_ActionList[0]);
+				}
 
-				std::map<std::string,irr::core::vector3df>::const_iterator it;
+				out->addString("target",m_TargetNodeName.c_str());
+
+				std::map<irr::core::stringc,irr::core::vector3df>::const_iterator it;
 
 				for(it = m_mapActionDesc.begin();it !=m_mapActionDesc.end();it++)
 				{  
 					out->addVector3d(it->first.c_str(),it->second);
-				}
-				/*out->addArray("action list",m_strActionList);
-				char szBuf[256];
-
-				out->addString("Mesh", SceneManager->getMeshCache()->getMeshFilename(Mesh));
-				out->addBool("ReadOnlyMaterials", ReadOnlyMaterials);
-
-				sprintf_s(szBuf,256,"%d,%d",m_TileCount.Width,m_TileCount.Height);
-				out->addString("TileCount",szBuf);
-
-				sprintf_s(szBuf,256,"%.2f,%.2f",m_TileSize.Width,m_TileSize.Height);
-				out->addString("TileSize",szBuf);*/
+				}			
+				
 			}
 
 			//! Reads attributes of the scene node.
 			void CFormatedAnimationNode::deserializeAttributes(io::IAttributes* in, io::SAttributeReadWriteOptions* options)
 			{	
+				m_strwActionList = in->getAttributeAsArray("actionlist");
+
+				if(m_strActionList.size() < m_strwActionList.size()) //새로 로딩된상태
+				{
+					m_strActionList.clear();
+					m_mapActionDesc.clear();
+					m_ActionList.clear();
+
+					u32 i=0;
+
+					for(i=0;i<m_strwActionList.size();i++)
+					{
+						irr::core::stringc strc = irr::core::stringc(m_strwActionList[i].c_str());
+						m_strActionList.push_back(strc);						
+						m_mapActionDesc[strc] = irr::core::vector3df(0,0,0);
+					}
+
+					//루프를 두개로 나눠논 이유는 무엇이냐면...
+					//복사된 값이 아니라 단순 포인터값이므로 지역변수쓰면 안된다.
+					for(i=0;i<m_strActionList.size();i++)
+					{
+						m_ActionList.push_back((char *const)m_strActionList[i].c_str());
+					}
+					m_ActionList.push_back(NULL); //종료 카드
+
+				}
+
+				//플러그인용 메뉴처리
 				m_CurCmd = in->getAttributeAsEnumeration("cmd"); //커멘트 읽기
+				m_strCmdParam = in->getAttributeAsString("cmd Param1");
 
-				if(m_CurCmd == "---")
 				{
-				}
-				else if(m_CurCmd == "joint")
-				{
-					irr::scene::IAnimatedMeshSceneNode *pTarNode = 
-						(irr::scene::IAnimatedMeshSceneNode *)SceneManager->getSceneNodeFromName(
-						m_TargetNodeName.c_str(),this);
+					//이부분은
+					//게임프로그램상에서는 디파인문등으로 빼놓고 컴파일 하는게좋다.
 
-					if(pTarNode)
+					if(m_CurCmd == "---")
 					{
-						int i;
+					}
+					else if(m_CurCmd == "joint")
+					{
+						irr::scene::IAnimatedMeshSceneNode *pTarNode = 
+							(irr::scene::IAnimatedMeshSceneNode *)SceneManager->getSceneNodeFromName(
+							m_TargetNodeName.c_str(),this);
 
-						for(i=0;i<pTarNode->getJointCount();i++)
+						if(pTarNode)
 						{
-							irr::scene::IBoneSceneNode *pBone =
-								pTarNode->getJointNode(i);
-						}
-					}
-
-					m_CurCmd = "---";
-				}
-
-				if(m_mapActionDesc.size())
-				{
-					m_CurAnimation = in->getAttributeAsEnumeration("animation");//,CFormatedAnimationNode::ActionNames);
-				}
-
-				m_TargetNodeName = in->getAttributeAsString("target");
-
-				//bool oldAddActionBtn = m_bAddActionBtn;
-				//액션을 추가한다.
-				//m_bAddActionBtn = in->getAttributeAsBool("add Action");	
-				//m_strAddActionName = in->getAttributeAsString("add Action Nanme").c_str();
-				/*if(m_bAddActionBtn != oldAddActionBtn && m_mapActionDesc.count(m_strAddActionName) == 0)
-				{					
-					if(m_mapActionDesc.count(m_strAddActionName) == 0)
-					{
-						m_strActionList.push_back(irr::core::stringw(m_strAddActionName.c_str()));
-					}
-
-					m_mapActionDesc[m_strAddActionName] = irr::core::vector3df(0,0,0);
-				}
-
-				std::map<std::string,irr::core::vector3df>::iterator it;
-				if(m_EnumActionList)
-				{
-					delete m_EnumActionList;
-				}
-
-				m_EnumActionList = new char*[m_mapActionDesc.size()];
-				*/
-
-				//액션정보얻기
-				{
-					std::map<std::string,irr::core::vector3df>::iterator it;
-					for(it = m_mapActionDesc.begin();it !=m_mapActionDesc.end();it++)
-					{
-						it->second = in->getAttributeAsVector3d(it->first.c_str());
-						//m_EnumActionList[i++] = (char *)it->first.c_str();
-						//m_EnumActionList.push_back(it->first.c_str());
-					}
-				}
-
-				changeAction(m_CurAnimation);
-
-				ISceneNode::deserializeAttributes(in, options);				
-			}
-
-			void CFormatedAnimationNode::OnAnimate(irr::u32 timeMs)
-			{
-				/*irr::scene::IAnimatedMeshSceneNode *pTarNode = 
-					(irr::scene::IAnimatedMeshSceneNode *)SceneManager->getSceneNodeFromName(
-					m_TargetNodeName.c_str(),this);
-
-				if(pTarNode)
-				{
-
-					switch(m_status)
-					{
-					case 0:
-						{
-							int i;
+							u32 i;
 
 							for(i=0;i<pTarNode->getJointCount();i++)
 							{
 								irr::scene::IBoneSceneNode *pBone =
 									pTarNode->getJointNode(i);
 							}
-							
-							changeAction(m_CurAnimation);
-
-							m_status = 1;
 						}
-						break;
+
+						m_CurCmd = "---"; //메뉴를 처리하고 원상태로 되돌려놓는다.(일종에 클릭기능)
 					}
-				}*/
-				
+					else if(m_CurCmd == "addAni")
+					{
+						if(m_mapActionDesc.count(m_strCmdParam.c_str()) == 0)
+						{
+							m_mapActionDesc[m_strCmdParam] = irr::core::vector3df(0,0,0);
+							m_strActionList.push_back(m_strCmdParam);
+							m_strwActionList.push_back(irr::core::stringw(m_strCmdParam.c_str()));
+
+							m_ActionList.clear();
+
+							u32 i;
+							for(i=0;i<m_strActionList.size();i++)
+							{
+								m_ActionList.push_back((char *const)m_strActionList[i].c_str());
+							}
+							m_ActionList.push_back(NULL);
+						}
+
+						m_CurCmd = "---";
+					}
+				}
+
+				/////////////////////////////////////////////////////
+				//본격적인 데이타로딩
+
+				if(m_mapActionDesc.size())
+				{
+					m_CurAnimation = in->getAttributeAsEnumeration("animation");//,CFormatedAnimationNode::ActionNames);
+
+					//액션정보얻기				
+					{
+						std::map<irr::core::stringc,irr::core::vector3df>::iterator it;
+						for(it = m_mapActionDesc.begin();it !=m_mapActionDesc.end();it++)
+						{
+							it->second = in->getAttributeAsVector3d(it->first.c_str());						
+						}
+					}
+				}
+
+				m_TargetNodeName = in->getAttributeAsString("target");			
+				changeAction(m_CurAnimation.c_str());
+				ISceneNode::deserializeAttributes(in, options);				
+			}
+
+			void CFormatedAnimationNode::OnAnimate(irr::u32 timeMs)
+			{	
 				ISceneNode::OnAnimate(timeMs);
 			}
 
-			void CFormatedAnimationNode::changeAction(std::string ActionName)
+			void CFormatedAnimationNode::changeAction(const irr::c8 *ActionName)
 			{
 				irr::scene::IAnimatedMeshSceneNode *pAni = 
 					(irr::scene::IAnimatedMeshSceneNode *)SceneManager->getSceneNodeFromName(

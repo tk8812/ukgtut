@@ -17,7 +17,7 @@ namespace irr
 
 				static const int TypeID = MAKE_IRR_ID('@','F','A','N');
 				static const char *Name;
-				static const c8* ActionNames[];
+				//static const c8* ActionNames[];
 				static const c8* CmdListNames[];
 
 				//! constructor
@@ -45,24 +45,24 @@ namespace irr
 				//! Reads attributes of the scene node.
 				virtual void deserializeAttributes(io::IAttributes* in, io::SAttributeReadWriteOptions* options=0);
 
-				void changeAction(std::string ActionName);
+				void changeAction(const irr::c8 *ActionName);
 
 				virtual void OnAnimate(u32 timeMs);
 
 			private:
 
 				irr::core::stringc m_TargetNodeName;
-				std::string m_CurAnimation;							
-				std::string m_CurCmd;
-				std::map<std::string,irr::core::vector3df> m_mapActionDesc;
+				irr::core::stringc m_CurAnimation;							
+				irr::core::stringc m_CurCmd;
+				irr::core::stringc m_strCmdParam;
 
-				irr::s32 m_status;
+				std::map<irr::core::stringc,irr::core::vector3df> m_mapActionDesc;
 
-
-				//std::string m_strAddActionName;
-				//bool m_bAddActionBtn;
-				//irr::core::array<irr::core::stringw> m_strActionList;
-				//char **m_EnumActionList;
+				//동적메뉴를 위한 삽질준비
+				irr::core::array<char *> m_ActionList; //열거형 출력용
+				irr::core::array<irr::core::stringc> m_strActionList; //스트링백업용
+				irr::core::array<irr::core::stringw> m_strwActionList; //파일저장용				
+						
 
 				core::aabbox3d<f32> Box;
 			};
