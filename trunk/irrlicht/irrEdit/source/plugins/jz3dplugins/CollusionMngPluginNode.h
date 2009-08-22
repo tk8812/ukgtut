@@ -14,6 +14,8 @@ namespace irr
 			public:
 
 				core::aabbox3d<f32> Box;
+				irr::core::stringc m_strBone;
+				irr::core::array<char *> m_BoneList;
 
 				static const int TypeID = MAKE_IRR_ID('@','C','L','M');
 				static const char *Name;

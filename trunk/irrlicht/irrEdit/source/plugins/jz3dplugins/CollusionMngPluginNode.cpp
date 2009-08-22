@@ -9,12 +9,21 @@ namespace irr
 			const char *CCollusionMngNode::Name  = "CCollusionMngNode";
 
 			CCollusionMngNode::CCollusionMngNode(ISceneNode* parent, ISceneManager* mgr, s32 id)
-				: ISceneNode(parent,mgr,id)
+				: ISceneNode(parent,mgr,id),
+				m_strBone("")
 			{
 #ifdef _DEBUG
 				setDebugName(CCollusionMngNode::Name);
 #endif
 				setAutomaticCulling(scene::EAC_OFF);
+
+				static char *a1 = "test";
+				static char *a2 = "test2";
+
+				//동적 열거형 만들기위한 예제
+				m_BoneList.push_back(a1);
+				m_BoneList.push_back(a2);
+				m_BoneList.push_back(NULL);
 			}
 			
 
@@ -34,31 +43,53 @@ namespace irr
 
 				video::IVideoDriver* driver = SceneManager->getVideoDriver();
 
-
-				if(Parent)
+				if ( DebugDataVisible & scene::EDS_BBOX )
 				{
-					if(Parent->getType() == ESNT_ANIMATED_MESH)
+					if(Parent)
 					{
-						irr::scene::IAnimatedMeshSceneNode *pNode = (irr::scene::IAnimatedMeshSceneNode *)Parent;
-
-						int i;//count = pNode->getJointCount();
-
-						for(i=0;i<pNode->getJointCount();i++)
+						if(Parent->getType() == ESNT_ANIMATED_MESH)
 						{
-							irr::scene::IBoneSceneNode *pBone =
-								pNode->getJointNode(i);
+							irr::scene::IAnimatedMeshSceneNode *pNode = (irr::scene::IAnimatedMeshSceneNode *)Parent;
+							irr::scene::IBoneSceneNode *pBone = pNode->getJointNode(m_strBone.c_str());
+							if(pBone)
+							{
+								irr::core::aabbox3df box(
+									irr::core::vector3df(-1,-1,-1), 
+									irr::core::vector3df(1,1,1));
 
-							/*irr::core::aabbox3df box(
-								irr::core::vector3df(-1,-1,-1), 
-								irr::core::vector3df(1,1,1));
+								driver->setTransform(video::ETS_WORLD,pBone->getAbsoluteTransformation());
 
-							driver->setTransform(video::ETS_WORLD,pBone->getAbsoluteTransformation());
-
-							driver->draw3DBox(box,irr::video::SColor(255,255,0,0));*/
-							
-						}						
+								driver->draw3DBox(box,irr::video::SColor(255,255,0,0));
+							}
+						}
 					}
 				}
+
+
+				//if(Parent)
+				//{
+				//	if(Parent->getType() == ESNT_ANIMATED_MESH)
+				//	{
+				//		irr::scene::IAnimatedMeshSceneNode *pNode = (irr::scene::IAnimatedMeshSceneNode *)Parent;
+
+				//		int i;//count = pNode->getJointCount();
+
+				//		for(i=0;i<pNode->getJointCount();i++)
+				//		{
+				//			irr::scene::IBoneSceneNode *pBone =
+				//				pNode->getJointNode(i);
+
+				//			/*irr::core::aabbox3df box(
+				//				irr::core::vector3df(-1,-1,-1), 
+				//				irr::core::vector3df(1,1,1));
+
+				//			driver->setTransform(video::ETS_WORLD,pBone->getAbsoluteTransformation());
+
+				//			driver->draw3DBox(box,irr::video::SColor(255,255,0,0));*/
+				//			
+				//		}						
+				//	}
+				//}
 			}
 
 
@@ -79,6 +110,7 @@ namespace irr
 
 				nb->cloneMembers(this, newManager);
 				nb->Box = Box;
+				nb->m_strBone = m_strBone;
 
 				nb->drop();
 				return nb;
@@ -91,6 +123,8 @@ namespace irr
 				
 				//데이터 쓰기 코드추가
 				//...
+				out->addString("bone",m_strBone.c_str());
+				out->addEnum("bones",0,(char **)&m_BoneList[0]);
 
 			}
 
@@ -99,6 +133,8 @@ namespace irr
 			{	
 				//데이터 읽기 코드추가
 				//...
+
+				m_strBone = in->getAttributeAsString("bone");
 
 				ISceneNode::deserializeAttributes(in, options);				
 			}			
