@@ -5,9 +5,15 @@
 #include <windows.h>
 
 #include "../sdk/ggfsdk/Singleton.h"
-#include "../sdk/ggfsdk/util.h"
+//#include "../sdk/ggfsdk/util.h"
+
 
 #include "../irredit/source/plugins/jz3dplugins/JZ3DSceneNodeFactory.h"
+
+#include "../irredit/source/plugins/jz3dplugins/CollusionMngPluginNode.h"
+#include "../irredit/source/plugins/jz3dplugins/FormatedAnimationNode.h"
+
+
 
 
 class CdmkApp :  

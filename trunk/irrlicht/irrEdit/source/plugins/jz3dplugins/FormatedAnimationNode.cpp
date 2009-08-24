@@ -163,6 +163,7 @@ namespace irr
 				m_CurCmd = in->getAttributeAsEnumeration("cmd"); //커멘트 읽기
 				m_strCmdParam = in->getAttributeAsString("cmd Param1");
 
+#ifdef JZ3DPLUGINS_EXPORTS
 				{
 					//이부분은
 					//게임프로그램상에서는 디파인문등으로 빼놓고 컴파일 하는게좋다.
@@ -210,6 +211,7 @@ namespace irr
 						m_CurCmd = "---";
 					}
 				}
+#endif
 
 				/////////////////////////////////////////////////////
 				//본격적인 데이타로딩

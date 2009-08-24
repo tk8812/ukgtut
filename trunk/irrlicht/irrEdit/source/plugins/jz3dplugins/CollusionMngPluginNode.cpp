@@ -1,29 +1,35 @@
 #include "CollusionMngPluginNode.h"
 
+
 namespace irr 
 {
 	namespace scene
 	{
 		namespace jz3d 
 		{
+
+			const c8* CCollusionMngNode::CollShapeNames[] =			
+			{
+				"sphere",
+				"box",
+				"cylinder",
+				"capsule",
+				0
+			};	
+
 			const char *CCollusionMngNode::Name  = "CCollusionMngNode";
 
 			CCollusionMngNode::CCollusionMngNode(ISceneNode* parent, ISceneManager* mgr, s32 id)
 				: ISceneNode(parent,mgr,id),
-				m_strBone("")
+				m_strBone(""),
+				m_strShape(CollShapeNames[0])
 			{
 #ifdef _DEBUG
 				setDebugName(CCollusionMngNode::Name);
 #endif
 				setAutomaticCulling(scene::EAC_OFF);
 
-				static char *a1 = "test";
-				static char *a2 = "test2";
-
-				//동적 열거형 만들기위한 예제
-				m_BoneList.push_back(a1);
-				m_BoneList.push_back(a2);
-				m_BoneList.push_back(NULL);
+				
 			}
 			
 
@@ -50,46 +56,45 @@ namespace irr
 						if(Parent->getType() == ESNT_ANIMATED_MESH)
 						{
 							irr::scene::IAnimatedMeshSceneNode *pNode = (irr::scene::IAnimatedMeshSceneNode *)Parent;
-							irr::scene::IBoneSceneNode *pBone = pNode->getJointNode(m_strBone.c_str());
+							irr::core::stringc strc =  m_strBone.c_str();
+							irr::scene::IBoneSceneNode *pBone = pNode->getJointNode(strc.c_str());
 							if(pBone)
 							{
-								irr::core::aabbox3df box(
-									irr::core::vector3df(-1,-1,-1), 
-									irr::core::vector3df(1,1,1));
+								if(m_GeometryInfo.type == CBPAGT_BOX)
+								{
+									irr::core::vector3df box_size =
+										irr::core::vector3df(m_GeometryInfo.box.X ,m_GeometryInfo.box.Y ,m_GeometryInfo.box.Z );
 
-								driver->setTransform(video::ETS_WORLD,pBone->getAbsoluteTransformation());
+									irr::core::aabbox3df box(
+										//irr::core::vector3df(-1,-1,-1), 
+										//irr::core::vector3df(1,1,1)
+										-(box_size/2),
+										(box_size/2)
+										);								
 
-								driver->draw3DBox(box,irr::video::SColor(255,255,0,0));
+									irr::core::matrix4 mat;
+									//Parent->getAbsoluteTransformation().getInverse(mat);
+									//mat = getAbsoluteTransformation() * mat;//로컬변환구하기
+									mat = pBone->getAbsoluteTransformation() * getRelativeTransformation();
+
+									driver->setTransform(video::ETS_WORLD,mat);
+
+									{
+										irr::video::SMaterial m;
+										m.Lighting = false;
+										m.ZWriteEnable = true;										
+										driver->setMaterial(m);
+									}
+
+									driver->draw3DBox(box,irr::video::SColor(255,255,0,0));
+								}
 							}
 						}
 					}
 				}
 
 
-				//if(Parent)
-				//{
-				//	if(Parent->getType() == ESNT_ANIMATED_MESH)
-				//	{
-				//		irr::scene::IAnimatedMeshSceneNode *pNode = (irr::scene::IAnimatedMeshSceneNode *)Parent;
-
-				//		int i;//count = pNode->getJointCount();
-
-				//		for(i=0;i<pNode->getJointCount();i++)
-				//		{
-				//			irr::scene::IBoneSceneNode *pBone =
-				//				pNode->getJointNode(i);
-
-				//			/*irr::core::aabbox3df box(
-				//				irr::core::vector3df(-1,-1,-1), 
-				//				irr::core::vector3df(1,1,1));
-
-				//			driver->setTransform(video::ETS_WORLD,pBone->getAbsoluteTransformation());
-
-				//			driver->draw3DBox(box,irr::video::SColor(255,255,0,0));*/
-				//			
-				//		}						
-				//	}
-				//}
+				
 			}
 
 
@@ -111,6 +116,8 @@ namespace irr
 				nb->cloneMembers(this, newManager);
 				nb->Box = Box;
 				nb->m_strBone = m_strBone;
+				nb->m_strShape = m_strShape;
+				nb->m_GeometryInfo = m_GeometryInfo;
 
 				nb->drop();
 				return nb;
@@ -119,12 +126,27 @@ namespace irr
 
 			void CCollusionMngNode::serializeAttributes(io::IAttributes* out, io::SAttributeReadWriteOptions* options) const
 			{
-				ISceneNode::serializeAttributes(out, options);		
+				ISceneNode::serializeAttributes(out, options);
 				
 				//데이터 쓰기 코드추가
 				//...
 				out->addString("bone",m_strBone.c_str());
-				out->addEnum("bones",0,(char **)&m_BoneList[0]);
+				out->addEnum("Shape",
+					irr::core::stringc(m_strShape.c_str()).c_str(),
+					CCollusionMngNode::CollShapeNames
+					);
+
+
+				if(m_strShape == L"sphere")
+				{
+					out->addFloat("radius",m_GeometryInfo.sphere.radius);
+				}
+				if(m_strShape == L"box")
+				{
+					out->addVector3d("box_size",irr::core::vector3df(m_GeometryInfo.box.X ,m_GeometryInfo.box.Y ,m_GeometryInfo.box.Z ));
+				}
+
+				//out->addEnum("bones",0,(char **)&m_BoneList[0]);
 
 			}
 
@@ -134,7 +156,23 @@ namespace irr
 				//데이터 읽기 코드추가
 				//...
 
-				m_strBone = in->getAttributeAsString("bone");
+				m_strBone = in->getAttributeAsStringW("bone");
+				m_strShape = irr::core::stringw(in->getAttributeAsEnumeration("Shape"));
+
+
+				if(m_strShape == L"sphere")
+				{
+					m_GeometryInfo.sphere.radius = in->getAttributeAsFloat("radius");
+					m_GeometryInfo.type = CBPAGT_SPHERE;
+				}
+				else
+				{
+					irr::core::vector3df box_size = in->getAttributeAsVector3d("box_size");
+					m_GeometryInfo.box.X = box_size.X;
+					m_GeometryInfo.box.Y = box_size.Y;
+					m_GeometryInfo.box.Z = box_size.Z;
+					m_GeometryInfo.type = CBPAGT_BOX;
+				}
 
 				ISceneNode::deserializeAttributes(in, options);				
 			}			

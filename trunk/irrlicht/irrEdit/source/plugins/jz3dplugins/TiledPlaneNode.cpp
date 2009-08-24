@@ -3,6 +3,7 @@
 //타일드 플래인 씬노드
 //작성 : 2009.8.18 gbox3d
 //v0.001 2009.8.19,속성 재설정시 이전 메트 리얼 보존하도록 수정
+//v0.002 2009.8.25, 메쉬 참조 카운터오류오인한 메모리릭 수정
 
 namespace irr 
 {
@@ -11,8 +12,8 @@ namespace irr
 		namespace jz3d
 		{
 			const char *CTiledPlaneNode::Name = "TiledPlaneNode";
-			//const char *MeshNameFormat = "./usr/mesh/tiledplanenodec%d_%ds%f_%f";
-			const char *MeshNameFormat = "../res/usr/mesh/tiledplanenodec%d_%ds%.1f_%.1f_";
+			const char *MeshNameFormat = "./usr/mesh/tiledplanenodec%d_%ds%f_%f";
+			//const char *MeshNameFormat = "../res/usr/mesh/tiledplanenode";
 
 			CTiledPlaneNode::CTiledPlaneNode(ISceneNode* parent, ISceneManager* mgr,s32 id,	const core::vector3df& position,const core::vector3df& rotation, const core::vector3df& scale)
 				: IMeshSceneNode(parent, mgr, id, position, rotation, scale),
@@ -25,12 +26,37 @@ namespace irr
 				
 
 			{	
-				setMesh(setupMesh(""));
-				//m_nTempType = ESNT_MESH;
+				#ifdef _DEBUG
+					setDebugName("CPlan1x1SceneNode");
+				#endif
+				
+					setMesh(setupMesh(""));
+
+				////m_nTempType = ESNT_MESH;
+
+				//irr::scene::IAnimatedMesh* pMesh; 		
+
+				//if(SceneManager->getMeshCache()->isMeshLoaded("jz3d/scene/mesh/plane1x1") == false)
+				//{
+				//	pMesh = SceneManager->addHillPlaneMesh("jz3d/scene/mesh/plane1x1",
+				//		irr::core::dimension2d<irr::f32>(10,10),
+				//		irr::core::dimension2d<irr::u32>(1,1));
+				//}
+				//else
+				//{
+				//	pMesh = SceneManager->getMesh("jz3d/scene/mesh/plane1x1");
+				//}
+				//
+				////Mesh = pMesh;
+				//
+
+				//setMesh(pMesh);
 			}
 
 			CTiledPlaneNode::~CTiledPlaneNode(void)
 			{
+				if (Mesh)
+					Mesh->drop();
 			}			
 
 			void CTiledPlaneNode::OnRegisterSceneNode()
@@ -210,7 +236,8 @@ namespace irr
 								// align to v->Normal
 								core::quaternion quatRot(v->Normal.X, 0.f, -v->Normal.X, 1+v->Normal.Y);
 								quatRot.normalize();
-								quatRot.getMatrix(m2);
+								//quatRot.getMatrix(m2);
+								m2 = quatRot.getMatrix();
 
 								m2.setTranslation(v->Pos);
 								m2*=AbsoluteTransformation;
@@ -294,7 +321,7 @@ namespace irr
 					MeshName = szBuf;
 				}
 
-				if(SceneManager->getMeshCache()->isMeshLoaded(MeshName) == false)
+				if(SceneManager->getMeshCache()->isMeshLoaded(MeshName) == false)				
 				{
 					pMesh = SceneManager->addHillPlaneMesh(MeshName,
 						m_TileSize,
@@ -322,6 +349,8 @@ namespace irr
 
 				Mesh = mesh;
 				copyMaterials();
+
+				//Mesh->getReferenceCount();
 
 				if (Mesh)
 					Mesh->grab();
@@ -375,7 +404,12 @@ namespace irr
 
 				char szBuf[256];
 
-				out->addString("Mesh", SceneManager->getMeshCache()->getMeshFilename(Mesh));
+#ifdef JZ3DPLUGINS_EXPORTS
+				out->addString("Mesh", SceneManager->getMeshCache()->getMeshFilename(Mesh) );
+				
+#else
+				out->addString("Mesh", SceneManager->getMeshCache()->getMeshFilename(Mesh).c_str());
+#endif
 				out->addBool("ReadOnlyMaterials", ReadOnlyMaterials);
 
 				sprintf_s(szBuf,256,"%d,%d",m_TileCount.Width,m_TileCount.Height);
@@ -449,17 +483,17 @@ namespace irr
 					}
 
 				}
-				//else if (newMeshStr != "" && oldMeshStr != newMeshStr)//메쉬 직접입력 할경우
-				//{
-				//	IMesh* newMesh = 0;
-				//	IAnimatedMesh* newAnimatedMesh = SceneManager->getMesh(newMeshStr.c_str());
+				else if (newMeshStr != "" && oldMeshStr != newMeshStr)//메쉬 직접입력 할경우
+				{
+					IMesh* newMesh = 0;
+					IAnimatedMesh* newAnimatedMesh = SceneManager->getMesh(newMeshStr.c_str());
 
-				//	if (newAnimatedMesh)
-				//		newMesh = newAnimatedMesh->getMesh(0);
+					if (newAnimatedMesh)
+						newMesh = newAnimatedMesh->getMesh(0);
 
-				//	if (newMesh)
-				//		setMesh(newMesh);
-				//}
+					if (newMesh)
+						setMesh(newMesh);
+				}
 
 				m_bLightMapGen_Enable = in->getAttributeAsBool("LightMap");
 
@@ -501,26 +535,14 @@ namespace irr
 				nb->m_bLightMapGen_Enable = m_bLightMapGen_Enable;
 
 				{
+#ifdef JZ3DPLUGINS_EXPORTS
 					nb->setMesh(setupMesh((char *)SceneManager->getMeshCache()->getMeshFilename(Mesh) ));	
+#else
+					nb->setMesh(setupMesh((char *)SceneManager->getMeshCache()->getMeshFilename(Mesh).c_str() ));	
+#endif
+					
 					//nb->copyMaterials(Mesh);
 					nb->Materials = Materials;
-
-					
-					//irr::scene::IMesh *mesh = setupMesh((char *)SceneManager->getMeshCache()->getMeshFilename(Mesh) );
-					//
-					//if (mesh)
-					//{
-					////	//return; // won't set null mesh
-
-					//	if (nb->Mesh)
-					//		nb->Mesh->drop();
-
-					//	nb->Mesh = mesh;
-					//	nb->copyMaterials(Mesh);
-
-					//	if (nb->Mesh)
-					//		nb->Mesh->grab();
-					//}					
 				}
 
 				nb->drop();

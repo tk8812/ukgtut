@@ -19,7 +19,7 @@
 		<Configuration
 			Name="Debug|Win32"
 			ConfigurationType="1"
-			InheritedPropertySheets="..\sdk\Property Sheets\bullet_debug.vsprops;..\sdk\Property Sheets\irrlicht.vsprops;..\sdk\Property Sheets\JGAGenernal.vsprops"
+			InheritedPropertySheets="..\sdk\Property Sheets\bullet_debug.vsprops;..\sdk\Property Sheets\irrlicht.vsprops;..\sdk\Property Sheets\JGAGenernal.vsprops;..\sdk\Property Sheets\irr_bullet.vsprops"
 			CharacterSet="1"
 			>
 			<Tool
@@ -91,7 +91,7 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
-			InheritedPropertySheets="..\sdk\Property Sheets\bullet_debug.vsprops;..\sdk\Property Sheets\irrlicht.vsprops;..\sdk\Property Sheets\JGAGenernal.vsprops"
+			InheritedPropertySheets="..\sdk\Property Sheets\bullet_debug.vsprops;..\sdk\Property Sheets\irrlicht.vsprops;..\sdk\Property Sheets\JGAGenernal.vsprops;..\sdk\Property Sheets\irr_bullet.vsprops"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
 			>
@@ -202,6 +202,30 @@
 				Name="jz3d"
 				>
 				<File
+					RelativePath="..\irrEdit\source\plugins\jz3dplugins\CollusionMngPluginNode.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\irrEdit\source\plugins\jz3dplugins\CollusionMngPluginNode.h"
+					>
+				</File>
+				<File
+					RelativePath="..\irrEdit\source\plugins\jz3dplugins\EmptyPluginNode.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\irrEdit\source\plugins\jz3dplugins\EmptyPluginNode.h"
+					>
+				</File>
+				<File
+					RelativePath="..\irrEdit\source\plugins\jz3dplugins\FormatedAnimationNode.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\irrEdit\source\plugins\jz3dplugins\FormatedAnimationNode.h"
+					>
+				</File>
+				<File
 					RelativePath="..\irrEdit\source\plugins\jz3dplugins\JZ3DSceneNodeFactory.cpp"
 					>
 				</File>
@@ -215,6 +239,78 @@
 				</File>
 				<File
 					RelativePath="..\irrEdit\source\plugins\jz3dplugins\Plan1x1SceneNode.h"
+					>
+				</File>
+				<File
+					RelativePath="..\irrEdit\source\plugins\jz3dplugins\TiledPlaneNode.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\irrEdit\source\plugins\jz3dplugins\TiledPlaneNode.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="bulletAnimator"
+				>
+				<File
+					RelativePath="..\sdk\irr_bullet\BulletChracterAnimator.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\sdk\irr_bullet\BulletChracterAnimator.h"
+					>
+				</File>
+				<File
+					RelativePath="..\sdk\irr_bullet\BulletFpsCamAnimator.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\sdk\irr_bullet\BulletFpsCamAnimator.h"
+					>
+				</File>
+				<File
+					RelativePath="..\sdk\irr_bullet\CBulletAnimatorManager.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\sdk\irr_bullet\CBulletAnimatorManager.h"
+					>
+				</File>
+				<File
+					RelativePath="..\sdk\irr_bullet\CBulletObjectAnimator.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\sdk\irr_bullet\CBulletObjectAnimator.h"
+					>
+				</File>
+				<File
+					RelativePath="..\sdk\irr_bullet\CBulletPhysicsUtils.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\sdk\irr_bullet\CBulletPhysicsUtils.h"
+					>
+				</File>
+				<File
+					RelativePath="..\sdk\irr_bullet\CBulletWorldAnimator.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\sdk\irr_bullet\CBulletWorldAnimator.h"
+					>
+				</File>
+				<File
+					RelativePath="..\sdk\irr_bullet\CFollowAnimator.h"
+					>
+				</File>
+				<File
+					RelativePath="..\sdk\irr_bullet\CThirdPersonAnimator.h"
+					>
+				</File>
+				<File
+					RelativePath="..\sdk\irr_bullet\CThirdPersonFollowAnimator.h"
 					>
 				</File>
 			</Filter>
