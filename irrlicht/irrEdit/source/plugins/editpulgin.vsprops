@@ -6,7 +6,7 @@
 	>
 	<Tool
 		Name="VCCLCompilerTool"
-		AdditionalIncludeDirectories="../../Irrlicht/include; ../../include;../../IrrEditLib/include"
+		AdditionalIncludeDirectories="../../Irrlicht/include;../../include;../../IrrEditLib/include;../../../../sdk/irr_bullet;../../../../sdk/bullet/src"
 	/>
 	<Tool
 		Name="VCLinkerTool"

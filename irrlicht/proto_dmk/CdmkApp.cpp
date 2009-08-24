@@ -1,8 +1,6 @@
 #include "CdmkApp.h"
 
 
-
-
 CdmkApp::CdmkApp(void)
 :m_pDevice(0),
 m_pVideo(0),
@@ -11,7 +9,7 @@ m_pGuiEnv(0)
 {
 	::_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF); //메모리릭 탐지
 	//메모리릭 발생원인 탐지.
-	//_CrtSetBreakAlloc(145);
+	//_CrtSetBreakAlloc(10930);
 }
 
 
@@ -50,12 +48,19 @@ bool CdmkApp::Init()
 	m_pSmgr->loadScene("../res/proto_dmk/object.irr");
 
 	{
-		irr::scene::ISceneNode *pNode = m_pSmgr->getSceneNodeFromName("usr/obj/b3d/ninja/white");
-		pNode->setVisible(true);
+		irr::scene::jz3d::CFormatedAnimationNode *pNode = 
+			(irr::scene::jz3d::CFormatedAnimationNode *)m_pSmgr->getSceneNodeFromName("usr/obj/b3d/ninja/white");
+		pNode->setVisible(true);		
+		pNode->changeAction("stand");		
 
-		irr::scene::IAnimatedMeshSceneNode *pBodyNode = (irr::scene::IAnimatedMeshSceneNode *)m_pSmgr->getSceneNodeFromName("body",pNode);		
-		pBodyNode->setFrameLoop(184,205); //대기상태
+		
+		pNode->setPosition(
+			//irr::core::vector3df(0,0,0)
+			m_pSmgr->getSceneNodeFromName("start",m_pSmgr->getSceneNodeFromName("usr/triger"))->getAbsolutePosition()
+			);
 	}
+
+	irr::scene::ICameraSceneNode *pCam = m_pSmgr->addCameraSceneNode(0,irr::core::vector3df(0,8,-30),irr::core::vector3df(0,0,0));	
 
 
 
@@ -74,10 +79,10 @@ bool CdmkApp::Init()
 bool CdmkApp::OnEvent(const irr::SEvent &event)
 {
 
-	//모든 애니메이터들에게 이밴트를 전달한다.
+	//애니메이터들에게 이밴트를 전달한다.
 	if(m_pSmgr)
 	{
-		ggf::utils::RecursiveEvent(m_pSmgr->getRootSceneNode(),event);
+		//ggf::utils::RecursiveEvent(m_pSmgr->getRootSceneNode(),event);
 	}
 
 	switch(event.EventType)
