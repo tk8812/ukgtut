@@ -5,19 +5,30 @@
 #include <windows.h>
 #include <memory>
 #include <vector>
+#include <string>
+#include <list>
+#include <map>
+#include <iostream>
 
-#include "../sdk/ggfsdk/Singleton.h"
-#include "HeroPlayer.h"
-//#include "../sdk/ggfsdk/util.h"
+//bullet
+#include "CFollowAnimator.h"
+#include "CBulletAnimatorManager.h"
+#include "CBulletWorldAnimator.h"
+#include "btBulletDynamicsCommon.h"
 
+//ggf
+#include "Singleton.h"
+#include "util.h"
 
+#include "FSMObject.h"
+
+//#include "HeroPlayer.h"
+
+//pulgin node
 #include "../irredit/source/plugins/jz3dplugins/JZ3DSceneNodeFactory.h"
-
 #include "../irredit/source/plugins/jz3dplugins/CollusionMngPluginNode.h"
 #include "../irredit/source/plugins/jz3dplugins/FormatedAnimationNode.h"
-
-
-
+#include "../irredit/source/plugins/jz3dplugins/TiledPlaneNode.h"
 
 class CdmkApp :  
 	public irr::IEventReceiver,
@@ -32,9 +43,9 @@ public:
 	irr::scene::ISceneManager *m_pSmgr;
 	irr::gui::IGUIEnvironment *m_pGuiEnv;
 
-	std::tr1::shared_ptr<CHeroPlayer> m_spHeroPlayer;
+	std::tr1::shared_ptr<IFSMObject> m_spHeroPlayer;
 	irr::scene::CBulletAnimatorManager* m_pBulletPhysicsFactory; 
-	irr::scene::CBulletWorldAnimator* m_pWorldAnimator; 	
+	irr::scene::CBulletWorldAnimator* m_pWorldAnimator;
 
 
 	//이벤트 핸들러

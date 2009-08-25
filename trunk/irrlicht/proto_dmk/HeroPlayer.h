@@ -9,7 +9,7 @@ class CHeroPlayer :
 	public IFSMObject
 {
 public:
-	CHeroPlayer(irr::scene::ISceneNode *pNode);
+	CHeroPlayer();
 	virtual ~CHeroPlayer(void);
 
 	virtual void Signal(std::string strSignal,void *pParam);
@@ -17,9 +17,11 @@ public:
 
 	virtual bool OnEvent(const irr::SEvent& event);
 
-	irr::scene::ISceneNode *m_pNode;
+	irr::scene::jz3d::CFormatedAnimationNode *m_pNode;
 	irr::scene::CBulletObjectAnimator *m_pObjectAnimator;
 
 	bool Init();
+
+	irr::scene::ISceneNode *m_pTrigerNode;
 
 };
