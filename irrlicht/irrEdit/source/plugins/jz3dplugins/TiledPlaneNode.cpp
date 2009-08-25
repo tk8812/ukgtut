@@ -405,8 +405,7 @@ namespace irr
 				char szBuf[256];
 
 #ifdef JZ3DPLUGINS_EXPORTS
-				out->addString("Mesh", SceneManager->getMeshCache()->getMeshFilename(Mesh) );
-				
+				out->addString("Mesh", SceneManager->getMeshCache()->getMeshFilename(Mesh) );				
 #else
 				out->addString("Mesh", SceneManager->getMeshCache()->getMeshFilename(Mesh).c_str());
 #endif

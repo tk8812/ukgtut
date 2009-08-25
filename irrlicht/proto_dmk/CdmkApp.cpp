@@ -1,6 +1,8 @@
 
 #include "CdmkApp.h"
 
+#include "FSMObject.h"
+#include "HeroPlayer.h"
 
 
 
@@ -19,6 +21,8 @@ m_pGuiEnv(0)
 CdmkApp::~CdmkApp(void)
 {
 	m_pDevice->drop();
+
+	m_pBulletPhysicsFactory->drop();	
 }
 
 bool CdmkApp::Init()
@@ -39,42 +43,93 @@ bool CdmkApp::Init()
 		irr::scene::jz3d::CJZ3DSceneNodeFactory *factory =
 			new irr::scene::jz3d::CJZ3DSceneNodeFactory(m_pSmgr);
 		m_pSmgr->registerSceneNodeFactory(factory);
-		factory->drop();
+		factory->drop();	
 	}
 
 	//리소스폴더 지정
-	m_pDevice->getFileSystem()->changeWorkingDirectoryTo("../.");
+	m_pDevice->getFileSystem()->changeWorkingDirectoryTo("../../res");
 
 	//초기화 코드 삽입...	
 
 	//월드씬로딩
-	m_pSmgr->loadScene("../res/proto_dmk/stage0.irr");
+	m_pSmgr->loadScene("proto_dmk/stage0.irr");
+	{
+		m_pBulletPhysicsFactory = new irr::scene::CBulletAnimatorManager(m_pSmgr);
+
+		//월드 애니메이터 추가
+		irr::scene::ISceneNode *pNode = m_pSmgr->addEmptySceneNode();
+		pNode->setName("usr/scene/physics/world/1");
+		//  기본중력 -9.8
+		irr::scene::CBulletWorldAnimatorParams worldParams;		
+		worldParams.bSoft = false;
+
+		m_pWorldAnimator =
+			m_pBulletPhysicsFactory->createBulletWorldAnimator(
+			m_pSmgr,
+			pNode,
+			&worldParams
+			);
+		//중력은 기본으로 y 축으로 -9.8			
+		pNode->addAnimator(m_pWorldAnimator);			
+		m_pWorldAnimator->drop();
+	}
+	{//물리지형처리초기화
+		irr::scene::ISceneNode *pNode;
+		pNode = m_pSmgr->getSceneNodeFromName("usr/bld");
+
+		irr::core::list<irr::scene::ISceneNode *>::ConstIterator it = pNode->getChildren().begin();
+
+		for(;it != pNode->getChildren().end();it++)
+		{
+			if( (*it)->getType() == irr::scene::ESNT_MESH ||
+				(*it)->getType() == irr::scene::jz3d::CTiledPlaneNode::TypeID)
+			{
+				//지형 오브잭트추가
+						
+				irr::scene::CBulletObjectAnimatorGeometry geom;
+				irr::scene::CBulletObjectAnimatorParams physicsParams;
+
+				irr::scene::IMeshSceneNode* pNode = (irr::scene::IMeshSceneNode*)(*it);
+
+				irr::scene::IMesh* pMesh = pNode->getMesh();
+				irr::scene::ISceneManager *pSmgr = m_pSmgr;
+
+				// add level static mesh
+				geom.type = scene::CBPAGT_CONCAVE_MESH;
+				geom.mesh.irrMesh = pMesh;
+				geom.meshFile = pSmgr->getMeshCache()->getMeshFilename(pMesh).c_str();
+
+				physicsParams.mass = 0.0f;
+
+				scene::CBulletObjectAnimator* levelAnim = 
+					m_pBulletPhysicsFactory->createBulletObjectAnimator(
+					pSmgr,
+					pNode,
+					m_pWorldAnimator->getID(),
+					&geom,
+					&physicsParams
+					);
+				pNode->addAnimator(levelAnim);
+				levelAnim->drop();			
+
+			}
+
+		}
+	}
+
+
 	//오브잭트씬로딩
-	m_pSmgr->loadScene("../res/proto_dmk/object.irr");
+	m_pSmgr->loadScene("proto_dmk/obj_ninja.irr");
 
-	m_spHeroPlayer = std::tr1::shared_ptr<CHeroPlayer>(new CHeroPlayer(m_pSmgr->getSceneNodeFromName("usr/obj/b3d/ninja/white")));
-	m_spHeroPlayer->Init();
+	{
+		CHeroPlayer *pHero = new CHeroPlayer();		
+		m_spHeroPlayer = std::tr1::shared_ptr<IFSMObject>(pHero);
+		if( pHero->Init() != true)
+			return false;
+	}
+	
 
-
-
-
-
-
-
-	//{
-	//	irr::scene::jz3d::CFormatedAnimationNode *pNode = 
-	//		(irr::scene::jz3d::CFormatedAnimationNode *)m_pSmgr->getSceneNodeFromName("usr/obj/b3d/ninja/white");
-	//	pNode->setVisible(true);		
-	//	pNode->changeAction("stand");		
-
-	//	
-	//	pNode->setPosition(
-	//		//irr::core::vector3df(0,0,0)
-	//		m_pSmgr->getSceneNodeFromName("start",m_pSmgr->getSceneNodeFromName("usr/triger"))->getAbsolutePosition()
-	//		);
-	//}
-
-	irr::scene::ICameraSceneNode *pCam = m_pSmgr->addCameraSceneNode(0,irr::core::vector3df(0,8,-30),irr::core::vector3df(0,0,0));	
+	irr::scene::ICameraSceneNode *pCam = m_pSmgr->addCameraSceneNode(0,irr::core::vector3df(0,18,-30),irr::core::vector3df(0,0,0));	
 
 
 
@@ -123,6 +178,11 @@ bool CdmkApp::OnEvent(const irr::SEvent &event)
 
 void CdmkApp::Update()
 {
+	static irr::u32 uLastTick=0;
+	irr::u32 uTick = m_pDevice->getTimer()->getTime();      
+	irr::f32 fDelta = ((float)(uTick - uLastTick)) / 1000.f; //델타값 구하기
+	uLastTick = uTick;
+
 	//프레임레이트 갱신
 	{
 		wchar_t wszbuf[256];
@@ -133,6 +193,11 @@ void CdmkApp::Update()
 
 	//게임로직 & 물리 & 구충돌처리
 	{
+		//적분처리
+		{
+			irr::u32 dt = (irr::u32)(fDelta * 1000000.f); //백만분의 일초단위의 틱값					
+			m_pBulletPhysicsFactory->OnUpdate(dt);
+		}
 		
 	}
 }
