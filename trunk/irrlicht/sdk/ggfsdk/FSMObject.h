@@ -50,8 +50,8 @@ public:
 	inline virtual irr::core::vector3df getPosition() {return irr::core::vector3df(0,0,0);}
 	inline virtual bool isDie() {return true;}
 
-	virtual void Signal(std::string strSignal,void *pParam) = 0;	
-	virtual void Update(irr::f32 fTick) =0;
+	virtual void Signal(std::string strSignal,void *pParam) = 0;	//상태변환등을처리한다.
+	virtual void Update(irr::f32 fTick) =0; //게임오브잭트로직처리한다.
 	
 	
 };

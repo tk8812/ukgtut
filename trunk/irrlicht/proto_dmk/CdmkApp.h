@@ -3,8 +3,11 @@
 #include <irrlicht.h>
 #include <crtdbg.h>
 #include <windows.h>
+#include <memory>
+#include <vector>
 
 #include "../sdk/ggfsdk/Singleton.h"
+#include "HeroPlayer.h"
 //#include "../sdk/ggfsdk/util.h"
 
 
@@ -28,6 +31,10 @@ public:
 	irr::video::IVideoDriver *m_pVideo;
 	irr::scene::ISceneManager *m_pSmgr;
 	irr::gui::IGUIEnvironment *m_pGuiEnv;
+
+	std::tr1::shared_ptr<CHeroPlayer> m_spHeroPlayer;
+	irr::scene::CBulletAnimatorManager* m_pBulletPhysicsFactory; 
+	irr::scene::CBulletWorldAnimator* m_pWorldAnimator; 	
 
 
 	//이벤트 핸들러

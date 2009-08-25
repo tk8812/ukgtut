@@ -1,4 +1,7 @@
+
 #include "CdmkApp.h"
+
+
 
 
 CdmkApp::CdmkApp(void)
@@ -43,22 +46,33 @@ bool CdmkApp::Init()
 	m_pDevice->getFileSystem()->changeWorkingDirectoryTo("../.");
 
 	//ÃÊ±âÈ­ ÄÚµå »ðÀÔ...	
-	m_pSmgr->loadScene("../res/proto_dmk/stage0.irr");
 
+	//¿ùµå¾À·Îµù
+	m_pSmgr->loadScene("../res/proto_dmk/stage0.irr");
+	//¿ÀºêÀèÆ®¾À·Îµù
 	m_pSmgr->loadScene("../res/proto_dmk/object.irr");
 
-	{
-		irr::scene::jz3d::CFormatedAnimationNode *pNode = 
-			(irr::scene::jz3d::CFormatedAnimationNode *)m_pSmgr->getSceneNodeFromName("usr/obj/b3d/ninja/white");
-		pNode->setVisible(true);		
-		pNode->changeAction("stand");		
+	m_spHeroPlayer = std::tr1::shared_ptr<CHeroPlayer>(new CHeroPlayer(m_pSmgr->getSceneNodeFromName("usr/obj/b3d/ninja/white")));
+	m_spHeroPlayer->Init();
 
-		
-		pNode->setPosition(
-			//irr::core::vector3df(0,0,0)
-			m_pSmgr->getSceneNodeFromName("start",m_pSmgr->getSceneNodeFromName("usr/triger"))->getAbsolutePosition()
-			);
-	}
+
+
+
+
+
+
+	//{
+	//	irr::scene::jz3d::CFormatedAnimationNode *pNode = 
+	//		(irr::scene::jz3d::CFormatedAnimationNode *)m_pSmgr->getSceneNodeFromName("usr/obj/b3d/ninja/white");
+	//	pNode->setVisible(true);		
+	//	pNode->changeAction("stand");		
+
+	//	
+	//	pNode->setPosition(
+	//		//irr::core::vector3df(0,0,0)
+	//		m_pSmgr->getSceneNodeFromName("start",m_pSmgr->getSceneNodeFromName("usr/triger"))->getAbsolutePosition()
+	//		);
+	//}
 
 	irr::scene::ICameraSceneNode *pCam = m_pSmgr->addCameraSceneNode(0,irr::core::vector3df(0,8,-30),irr::core::vector3df(0,0,0));	
 
