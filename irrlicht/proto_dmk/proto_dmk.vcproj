@@ -19,7 +19,7 @@
 		<Configuration
 			Name="Debug|Win32"
 			ConfigurationType="1"
-			InheritedPropertySheets="..\sdk\Property Sheets\bullet_debug.vsprops;..\sdk\Property Sheets\irrlicht.vsprops;..\sdk\Property Sheets\JGAGenernal.vsprops;..\sdk\Property Sheets\irr_bullet.vsprops"
+			InheritedPropertySheets="..\sdk\Property Sheets\bullet_debug.vsprops;..\sdk\Property Sheets\irrlicht.vsprops;..\sdk\Property Sheets\JGAGenernal.vsprops;..\sdk\Property Sheets\irr_bullet.vsprops;..\sdk\Property Sheets\ggf.vsprops"
 			CharacterSet="1"
 			>
 			<Tool
@@ -91,7 +91,7 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
-			InheritedPropertySheets="..\sdk\Property Sheets\bullet_debug.vsprops;..\sdk\Property Sheets\irrlicht.vsprops;..\sdk\Property Sheets\JGAGenernal.vsprops;..\sdk\Property Sheets\irr_bullet.vsprops"
+			InheritedPropertySheets="..\sdk\Property Sheets\bullet_debug.vsprops;..\sdk\Property Sheets\irrlicht.vsprops;..\sdk\Property Sheets\JGAGenernal.vsprops;..\sdk\Property Sheets\irr_bullet.vsprops;..\sdk\Property Sheets\ggf.vsprops"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
 			>
@@ -175,6 +175,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\HeroPlayer.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\main.cpp"
 				>
 			</File>
@@ -186,6 +190,10 @@
 			>
 			<File
 				RelativePath=".\CdmkApp.h"
+				>
+			</File>
+			<File
+				RelativePath=".\HeroPlayer.h"
 				>
 			</File>
 		</Filter>
@@ -311,6 +319,46 @@
 				</File>
 				<File
 					RelativePath="..\sdk\irr_bullet\CThirdPersonFollowAnimator.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="ggf"
+				>
+				<File
+					RelativePath="..\sdk\ggfsdk\EsenFrame.h"
+					>
+				</File>
+				<File
+					RelativePath="..\sdk\ggfsdk\EsenObject.h"
+					>
+				</File>
+				<File
+					RelativePath="..\sdk\ggfsdk\FrameMng.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\sdk\ggfsdk\FrameMng.h"
+					>
+				</File>
+				<File
+					RelativePath="..\sdk\ggfsdk\FSMObject.h"
+					>
+				</File>
+				<File
+					RelativePath="..\sdk\ggfsdk\ggf_parser.h"
+					>
+				</File>
+				<File
+					RelativePath="..\sdk\ggfsdk\Singleton.h"
+					>
+				</File>
+				<File
+					RelativePath="..\sdk\ggfsdk\tokenizer.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\sdk\ggfsdk\tokenizer.h"
 					>
 				</File>
 			</Filter>

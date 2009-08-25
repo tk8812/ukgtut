@@ -58,6 +58,7 @@ namespace irr
 							irr::scene::IAnimatedMeshSceneNode *pNode = (irr::scene::IAnimatedMeshSceneNode *)Parent;
 							irr::core::stringc strc =  m_strBone.c_str();
 							irr::scene::IBoneSceneNode *pBone = pNode->getJointNode(strc.c_str());
+							
 							if(pBone)
 							{
 								if(m_GeometryInfo.type == CBPAGT_BOX)
