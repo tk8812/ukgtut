@@ -45,8 +45,10 @@ namespace irr
 				//! Reads attributes of the scene node.
 				virtual void deserializeAttributes(io::IAttributes* in, io::SAttributeReadWriteOptions* options=0);
 
-				void changeAction(const irr::c8 *ActionName);
+				void changeAction(const irr::c8 *ActionName,bool bLoop = true);
 
+				bool IsActionFinished();
+				
 				virtual void OnAnimate(u32 timeMs);
 
 			private:

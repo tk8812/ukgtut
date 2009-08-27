@@ -405,9 +405,11 @@ namespace irr
 				char szBuf[256];
 
 #ifdef JZ3DPLUGINS_EXPORTS
-				out->addString("Mesh", SceneManager->getMeshCache()->getMeshFilename(Mesh) );				
+				out->addString("Mesh", SceneManager->getMeshCache()->getMeshFilename(Mesh) );		
+
 #else
-				out->addString("Mesh", SceneManager->getMeshCache()->getMeshFilename(Mesh).c_str());
+				out->addString("Mesh", SceneManager->getMeshCache()->getMeshFilename(Mesh));
+				//out->addString("Mesh", SceneManager->getMeshCache()->getMeshFilename(Mesh).c_str());
 #endif
 				out->addBool("ReadOnlyMaterials", ReadOnlyMaterials);
 
@@ -537,7 +539,8 @@ namespace irr
 #ifdef JZ3DPLUGINS_EXPORTS
 					nb->setMesh(setupMesh((char *)SceneManager->getMeshCache()->getMeshFilename(Mesh) ));	
 #else
-					nb->setMesh(setupMesh((char *)SceneManager->getMeshCache()->getMeshFilename(Mesh).c_str() ));	
+					nb->setMesh(setupMesh((char *)SceneManager->getMeshCache()->getMeshFilename(Mesh) ));	
+					//nb->setMesh(setupMesh((char *)SceneManager->getMeshCache()->getMeshFilename(Mesh).c_str() ));	
 #endif
 					
 					//nb->copyMaterials(Mesh);
