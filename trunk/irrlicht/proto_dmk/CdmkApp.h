@@ -16,6 +16,17 @@
 #include "CBulletWorldAnimator.h"
 #include "btBulletDynamicsCommon.h"
 
+#include "BulletCollision/NarrowPhaseCollision/btGjkPairDetector.h"
+#include "BulletCollision/NarrowPhaseCollision/btPointCollector.h"
+#include "BulletCollision/NarrowPhaseCollision/btVoronoiSimplexSolver.h"
+#include "BulletCollision/NarrowPhaseCollision/btConvexPenetrationDepthSolver.h"
+#include "BulletCollision/NarrowPhaseCollision/btGjkEpaPenetrationDepthSolver.h"
+
+#include "btBulletDynamicsCommon.h"
+#include "BulletDynamics/Character/btKinematicCharacterController.h"
+#include "BulletCollision/CollisionDispatch/btGhostObject.h"
+
+
 //ggf
 #include "Singleton.h"
 #include "util.h"
@@ -43,7 +54,9 @@ public:
 	irr::scene::ISceneManager *m_pSmgr;
 	irr::gui::IGUIEnvironment *m_pGuiEnv;
 
-	std::tr1::shared_ptr<IFSMObject> m_spHeroPlayer;
+	std::tr1::shared_ptr<IFSMObject> m_spHeroPlayer;//주인공(컨트롤러블)
+	std::tr1::shared_ptr<IFSMObject> m_spZombie1; //적오브잭트
+
 	irr::scene::CBulletAnimatorManager* m_pBulletPhysicsFactory; 
 	irr::scene::CBulletWorldAnimator* m_pWorldAnimator;
 

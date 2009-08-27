@@ -171,6 +171,10 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\AIPlayer.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\CdmkApp.cpp"
 				>
 			</File>
@@ -189,11 +193,19 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath=".\AIPlayer.h"
+				>
+			</File>
+			<File
 				RelativePath=".\CdmkApp.h"
 				>
 			</File>
 			<File
 				RelativePath=".\HeroPlayer.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Player.h"
 				>
 			</File>
 		</Filter>

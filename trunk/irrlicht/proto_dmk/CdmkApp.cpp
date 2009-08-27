@@ -3,6 +3,7 @@
 
 #include "FSMObject.h"
 #include "HeroPlayer.h"
+#include "aiPlayer.h"
 
 
 
@@ -29,7 +30,8 @@ bool CdmkApp::Init()
 {
 	m_pDevice = irr::createDevice(
 		irr::video::EDT_DIRECT3D9,
-		irr::core::dimension2du(640,480), //1.6버전용
+		//irr::core::dimension2du(640,480), //1.6버전용
+		irr::core::dimension2di(640,480), //1.5버전용
 		32,
 		false, false, false,
 		this
@@ -97,9 +99,12 @@ bool CdmkApp::Init()
 				// add level static mesh
 				geom.type = scene::CBPAGT_CONCAVE_MESH;
 				geom.mesh.irrMesh = pMesh;
-				geom.meshFile = pSmgr->getMeshCache()->getMeshFilename(pMesh).c_str();
+				//geom.meshFile = pSmgr->getMeshCache()->getMeshFilename(pMesh).c_str();
+				geom.meshFile = pSmgr->getMeshCache()->getMeshFilename(pMesh);
 
 				physicsParams.mass = 0.0f;
+				physicsParams.friction = .5f;
+				physicsParams.restitution = 0.5f;
 
 				scene::CBulletObjectAnimator* levelAnim = 
 					m_pBulletPhysicsFactory->createBulletObjectAnimator(
@@ -120,12 +125,29 @@ bool CdmkApp::Init()
 
 	//오브잭트씬로딩
 	m_pSmgr->loadScene("proto_dmk/obj_ninja.irr");
+	m_pSmgr->loadScene("proto_dmk/obj_zombie.irr");
 
+	//주인공 닌자
 	{
 		CHeroPlayer *pHero = new CHeroPlayer();		
 		m_spHeroPlayer = std::tr1::shared_ptr<IFSMObject>(pHero);
-		if( pHero->Init() != true)
+
+		irr::scene::ISceneNode *pNode = m_pSmgr->getSceneNodeFromName("usr/obj/b3d/ninja/blue");
+
+		if( pNode && pHero->Init(pNode) != true)
 			return false;
+	}
+
+	{
+		CAIPlayer *pPlayer = new CAIPlayer();		
+		m_spZombie1 = std::tr1::shared_ptr<IFSMObject>(pPlayer);
+
+		irr::scene::ISceneNode *pNode = m_pSmgr->getSceneNodeFromName("usr/obj/b3d/zombie/1");
+
+		if( pNode && pPlayer->Init(pNode) != true)
+		{
+			return false;
+		}
 	}
 	
 
@@ -152,6 +174,12 @@ bool CdmkApp::OnEvent(const irr::SEvent &event)
 	if(m_pSmgr)
 	{
 		//ggf::utils::RecursiveEvent(m_pSmgr->getRootSceneNode(),event);
+		
+	}
+	if(m_spHeroPlayer.get())
+	{
+		((CHeroPlayer *)m_spHeroPlayer.get())->OnEvent(event);
+		
 	}
 
 	switch(event.EventType)
@@ -193,6 +221,8 @@ void CdmkApp::Update()
 
 	//게임로직 & 물리 & 구충돌처리
 	{
+		m_spHeroPlayer->Update(fDelta);
+		m_spZombie1->Update(fDelta);
 		//적분처리
 		{
 			irr::u32 dt = (irr::u32)(fDelta * 1000000.f); //백만분의 일초단위의 틱값					

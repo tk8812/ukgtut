@@ -237,23 +237,44 @@ namespace irr
 
 			void CFormatedAnimationNode::OnAnimate(irr::u32 timeMs)
 			{	
-				ISceneNode::OnAnimate(timeMs);
+				ISceneNode::OnAnimate(timeMs);	
+
+				/*irr::scene::IAnimatedMeshSceneNode *pAni = 
+					(irr::scene::IAnimatedMeshSceneNode *)SceneManager->getSceneNodeFromName(
+					m_TargetNodeName.c_str(),this);*/
+
+				//pAni->animateJoints();
+
 			}
 
-			void CFormatedAnimationNode::changeAction(const irr::c8 *ActionName)
+			bool CFormatedAnimationNode::IsActionFinished()
 			{
 				irr::scene::IAnimatedMeshSceneNode *pAni = 
 					(irr::scene::IAnimatedMeshSceneNode *)SceneManager->getSceneNodeFromName(
 					m_TargetNodeName.c_str(),this);
+				if(pAni->getEndFrame() == pAni->getFrameNr())
+				{
+					return true;
+				}
+
+				return false;
+			}
+
+			void CFormatedAnimationNode::changeAction(const irr::c8 *ActionName,bool bLoop)
+			{
+				irr::scene::IAnimatedMeshSceneNode *pAni = 
+					(irr::scene::IAnimatedMeshSceneNode *)SceneManager->getSceneNodeFromName(
+					m_TargetNodeName.c_str(),this);			
 
 				
 				if(pAni)
 				{
+					pAni->setLoopMode(bLoop);
 					pAni->setAnimationSpeed(m_mapActionDesc[ActionName].Z);
 					pAni->setFrameLoop(
 						(irr::s32)m_mapActionDesc[ActionName].X,
 						(irr::s32)m_mapActionDesc[ActionName].Y
-						);					
+						);
 				}					
 			}
 		}
