@@ -26,7 +26,8 @@ bool CHeroPlayer::Init(irr::scene::ISceneNode *pNode)
 
 	if(CPlayer::Init(pNode))
 	{
-				
+		//m_pChracterAnimator->setCCD(1/60,4.0f);	
+		//m_pChracterAnimator->setCCD((1.f), .2f * (1.f));
 
 		return true;
 	}
@@ -93,7 +94,7 @@ void CHeroPlayer::Update(irr::f32 fTick)
 			btScalar speed = 0;
 			btScalar angle = 0;		
 
-			speed = 4.0f;
+			speed = 8.0f;
 
 			if( m_Key[irr::KEY_UP] ) {
 				angle = 0;
@@ -120,7 +121,7 @@ void CHeroPlayer::Update(irr::f32 fTick)
 			{
 				angle = m_pChracterAnimator->getBodyFrontAngle();// * irr::core::RADTODEG;//.getHorizontalAngle().Y;			
 				SetStatus(FSM_STAND);
-			}
+			}			
 			
 			m_pChracterAnimator->controlStep_Walker(WalkVelocity);
 		}
