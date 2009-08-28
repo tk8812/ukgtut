@@ -115,6 +115,8 @@ bool CdmkApp::Init()
 					&physicsParams
 					);
 				pNode->addAnimator(levelAnim);
+				//levelAnim->setCCD((1.f), .2f * (1.f));
+				//levelAnim->setCCD(1/60,
 				levelAnim->drop();			
 
 			}
