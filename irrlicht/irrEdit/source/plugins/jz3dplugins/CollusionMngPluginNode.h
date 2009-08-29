@@ -4,6 +4,7 @@
 
 #include <irrlicht.h>
 
+
 #include "CBulletObjectAnimator.h"
 
 namespace irr 
@@ -30,33 +31,31 @@ namespace irr
 				CBulletObjectAnimatorGeometry *getGeometryInfo(){return &m_GeometryInfo;}
 				btCollisionShape *getCollisionShape() {return m_spColShape.get();}
 				
-				inline btTransform getWorldTransform()
+				inline irr::core::matrix4 getCollisionShapeTransform()
 				{
-					btTransform bt;
 					irr::core::matrix4 mat;
 
-					if(m_strBone == "")
+					if(m_strBone != "")
 					{
-						mat = m_matJoint * getRelativeTransformation();
-						//bt.setFromOpenGLMatrix(mat.pointer());
+						//각도와 이동변환만 골라서 적용시켜준다.
+						irr::core::matrix4 mat_j = m_matJoint * getRelativeTransformation();
+						irr::core::matrix4 mat_t,mat_r;
+
+						mat_t.setTranslation(mat_j.getTranslation());
+						mat_r.setRotationDegrees(mat_j.getRotationDegrees());	
+						mat = mat_t * mat_r;
 					}
 					else
-					{
-						mat = getAbsoluteTransformation();
-						//bt.setFromOpenGLMatrix(getAbsoluteTransformation().pointer());
+					{	
+						irr::core::matrix4 mat_j = getAbsoluteTransformation();
+						irr::core::matrix4 mat_t,mat_r;
+
+						mat_t.setTranslation(mat_j.getTranslation());
+						mat_r.setRotationDegrees(mat_j.getRotationDegrees());	
+						mat = mat_t * mat_r;
 					}
-
-					irr::core::matrix4 mat_t,mat_r;
-
-					mat_t.setTranslation(mat.getTranslation());
-					mat_r.setRotationDegrees(mat.getRotationDegrees());		
-
-					mat = mat_t * mat_r; //각도와 위치 변환만 적용
-
-					bt.setFromOpenGLMatrix(mat.pointer());
-
-					return bt;
-				}
+					return mat;
+				}				
 
 				//irr::core::array<char *> m_BoneList;
 

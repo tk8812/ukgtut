@@ -1,7 +1,7 @@
 
 #include "CdmkApp.h"
 
-#include "FSMObject.h"
+//#include "FSMObject.h"
 #include "HeroPlayer.h"
 #include "aiPlayer.h"
 
@@ -132,7 +132,7 @@ bool CdmkApp::Init()
 	//주인공 닌자
 	{
 		CHeroPlayer *pHero = new CHeroPlayer();		
-		m_spHeroPlayer = std::tr1::shared_ptr<IFSMObject>(pHero);
+		m_spHeroPlayer = SP_PLAYER(pHero);
 
 		irr::scene::ISceneNode *pNode = m_pSmgr->getSceneNodeFromName("usr/obj/b3d/ninja/blue");
 
@@ -142,7 +142,7 @@ bool CdmkApp::Init()
 
 	{
 		CAIPlayer *pPlayer = new CAIPlayer();		
-		m_spZombie1 = std::tr1::shared_ptr<IFSMObject>(pPlayer);
+		m_spZombie1 = SP_PLAYER(pPlayer);
 
 		irr::scene::ISceneNode *pNode = m_pSmgr->getSceneNodeFromName("usr/obj/b3d/zombie/1");
 

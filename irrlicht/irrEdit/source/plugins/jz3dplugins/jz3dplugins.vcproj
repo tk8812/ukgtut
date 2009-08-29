@@ -93,7 +93,7 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
-			InheritedPropertySheets="..\editpulgin.vsprops"
+			InheritedPropertySheets="..\editpulgin_rel.vsprops"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
 			>

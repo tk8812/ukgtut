@@ -1,5 +1,12 @@
 #include "CollusionMngPluginNode.h"
 
+#pragma warning(disable:4819)
+
+#include "btBulletDynamicsCommon.h"
+#include "BulletCollision/Gimpact/btGImpactShape.h"
+#include "BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h"
+
+
 
 namespace irr 
 {
@@ -101,25 +108,27 @@ namespace irr
 						irr::video::SColor draw_color(255,255,0,0);
 
 
-						if(m_strBone == "")
-						{
-							//각도와 이동변환만 골라서 적용시켜준다.
-							irr::core::matrix4 mat_t,mat_r;
-							mat_t.setTranslation(getAbsoluteTransformation().getTranslation());
-							mat_r.setRotationDegrees(getAbsoluteTransformation().getRotationDegrees());
+						//if(m_strBone == "")
+						//{
+						//	//각도와 이동변환만 골라서 적용시켜준다.
+						//	irr::core::matrix4 mat_t,mat_r;
+						//	mat_t.setTranslation(getAbsoluteTransformation().getTranslation());
+						//	mat_r.setRotationDegrees(getAbsoluteTransformation().getRotationDegrees());
 
-							driver->setTransform(video::ETS_WORLD,(mat_t * mat_r) );							
-						}
-						else if(Parent->getType() == ESNT_ANIMATED_MESH)
-						{
-							irr::core::matrix4 mat = m_matJoint * getRelativeTransformation();
-							irr::core::matrix4 mat_t,mat_r;
+						//	driver->setTransform(video::ETS_WORLD,(mat_t * mat_r) );							
+						//}
+						//else if(Parent->getType() == ESNT_ANIMATED_MESH)
+						//{
+						//	irr::core::matrix4 mat = m_matJoint * getRelativeTransformation();
+						//	irr::core::matrix4 mat_t,mat_r;
 
-							mat_t.setTranslation(mat.getTranslation());
-							mat_r.setRotationDegrees(mat.getRotationDegrees());							
+						//	mat_t.setTranslation(mat.getTranslation());
+						//	mat_r.setRotationDegrees(mat.getRotationDegrees());							
 
-							driver->setTransform(video::ETS_WORLD,(mat_t * mat_r) );							
-						}
+						//	driver->setTransform(video::ETS_WORLD,(mat_t * mat_r) );							
+						//}
+
+						driver->setTransform(video::ETS_WORLD,getCollisionShapeTransform());
 
 						{
 							if(m_GeometryInfo.type == CBPAGT_BOX)
@@ -278,7 +287,7 @@ namespace irr
 				{
 					m_GeometryInfo.sphere.radius = in->getAttributeAsFloat("radius");
 					m_GeometryInfo.type = CBPAGT_SPHERE;
-					m_spColShape = std::tr1::shared_ptr<btCollisionShape>();
+					m_spColShape = std::tr1::shared_ptr<btCollisionShape>(new btSphereShape(m_GeometryInfo.sphere.radius));
 				}
 				else if(m_strShape == L"box")
 				{
@@ -287,12 +296,23 @@ namespace irr
 					m_GeometryInfo.box.Y = box_size.Y;
 					m_GeometryInfo.box.Z = box_size.Z;
 					m_GeometryInfo.type = CBPAGT_BOX;
+
+					btVector3 btbox;
+
+					Irrlicht2Bullet(box_size,btbox);
+
+					m_spColShape = std::tr1::shared_ptr<btCollisionShape>(new btBoxShape(btbox));
 				}
 				else if(m_strShape == L"capsule")
 				{
 					m_GeometryInfo.Capsule.hight = in->getAttributeAsFloat("height");
 					m_GeometryInfo.Capsule.radius = in->getAttributeAsFloat("radius");
 					m_GeometryInfo.type = CBPAGT_CAPSULE;
+
+					m_spColShape = std::tr1::shared_ptr<btCollisionShape>(new btCapsuleShape(m_GeometryInfo.Capsule.radius,
+						m_GeometryInfo.Capsule.hight)
+						);
+
 				}
 
 				ISceneNode::deserializeAttributes(in, options);				

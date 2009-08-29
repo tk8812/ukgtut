@@ -1,10 +1,5 @@
 #pragma once
 
-
-#include "FSMObject.h"
-#include "Player.h"
-
-
 class CHeroPlayer : public CPlayer,public irr::IEventReceiver
 	
 {

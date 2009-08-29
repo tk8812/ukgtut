@@ -10,6 +10,8 @@
 	/>
 	<Tool
 		Name="VCLinkerTool"
+		AdditionalDependencies="libbulletmath_d.lib libbulletdynamics_d.lib libbulletsoftbody_d.lib libbulletcollision_d.lib libconvexdecomposition_d.lib libGIMPACTUtils_d.lib"
 		OutputFile="../../../plugins/$(ProjectName).dll"
+		AdditionalLibraryDirectories="../../../../sdk/bullet\out\debug8\libs"
 	/>
 </VisualStudioPropertySheet>

@@ -12,8 +12,20 @@ CAIPlayer::~CAIPlayer(void)
 {
 }
 
-void CAIPlayer::Signal(std::string,void *pParam)
+void CAIPlayer::Signal(std::string strSignal,void *pParam)
 {
+	if(strSignal == "kicked")
+	{
+		CPlayer *doer = (CPlayer *)pParam;
+		irr::core::vector3df vdodir = doer->getPosition() - getPosition();
+		vdodir.normalize();
+		
+		irr::core::vector3df vblowDir(-vdodir.X,0,-vdodir.Z);		
+		m_pChracterAnimator->applyImpulse(700.f * vblowDir);
+		m_pChracterAnimator->applyImpulse(70.f * irr::core::vector3df(0,1,0));
+
+		SetStatus(FSM_ATTACKED);
+	}
 }
 
 void CAIPlayer::Update(irr::f32 fTick)
@@ -52,5 +64,20 @@ void CAIPlayer::Update(irr::f32 fTick)
 		break;
 	case FSM_KICK:
 		break;
+	case FSM_ATTACKED:
+		if(GetStep() == 0)
+		{
+			m_pNode->changeAction("damage",false);			
+
+			IncStep();
+		}
+		else if(GetStep() == 1)
+		{	
+			if(m_pNode->IsActionFinished()) 
+			{	
+				SetStatus(FSM_STAND);
+			}
+		}
+		break;	
 	}
 }

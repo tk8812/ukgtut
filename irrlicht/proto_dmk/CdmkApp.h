@@ -31,8 +31,8 @@
 #include "Singleton.h"
 #include "util.h"
 
-#include "FSMObject.h"
-
+//#include "FSMObject.h"
+//#include "player.h"
 //#include "HeroPlayer.h"
 
 //pulgin node
@@ -40,6 +40,15 @@
 #include "../irredit/source/plugins/jz3dplugins/CollusionMngPluginNode.h"
 #include "../irredit/source/plugins/jz3dplugins/FormatedAnimationNode.h"
 #include "../irredit/source/plugins/jz3dplugins/TiledPlaneNode.h"
+
+
+//게임플레이어컨트롤 인터패이스
+#include "FSMObject.h"
+#include "Player.h"
+
+typedef std::tr1::shared_ptr<CPlayer> SP_PLAYER;
+
+
 
 class CdmkApp :  
 	public irr::IEventReceiver,
@@ -54,8 +63,8 @@ public:
 	irr::scene::ISceneManager *m_pSmgr;
 	irr::gui::IGUIEnvironment *m_pGuiEnv;
 
-	std::tr1::shared_ptr<IFSMObject> m_spHeroPlayer;//주인공(컨트롤러블)
-	std::tr1::shared_ptr<IFSMObject> m_spZombie1; //적오브잭트
+	SP_PLAYER m_spHeroPlayer;//주인공(컨트롤러블)
+	SP_PLAYER m_spZombie1; //적오브잭트
 
 	irr::scene::CBulletAnimatorManager* m_pBulletPhysicsFactory; 
 	irr::scene::CBulletWorldAnimator* m_pWorldAnimator;
