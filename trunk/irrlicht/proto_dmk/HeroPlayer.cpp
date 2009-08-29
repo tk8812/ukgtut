@@ -2,6 +2,19 @@
 
 #include "HeroPlayer.h"
 
+/*
+
+해결해야할문제점
+1. 캐릭터 컨트롤러의 터널링문제 - 사양이 낮은 곳에서 터널링이발생할수있다.
+해결방법은 이동방향으로 광선 검사를 수행해서 근접물체가 있으면 움직임을 멈추게 해야한다.
+
+if( 캐릭컨트롤러의 이동방향 앞으로 물체가 근접했는가? == false)
+	m_pChracterAnimator->controlStep_Walker(WalkVelocity);
+
+2. 충돌 물체의 미세한 오차 처리 (마진값과의 관계 정리)
+
+
+*/
 
 
 CHeroPlayer::CHeroPlayer()
@@ -36,7 +49,7 @@ bool CHeroPlayer::Init(irr::scene::ISceneNode *pNode)
 
 
 
-void CHeroPlayer::Update(irr::f32 fTick)
+void CHeroPlayer::Update(irr::f32 fDelta)
 {
 	
 	irr::scene::ISceneManager *pSmgr = CdmkApp::GetPtr()->m_pSmgr;
@@ -94,7 +107,7 @@ void CHeroPlayer::Update(irr::f32 fTick)
 			btScalar speed = 0;
 			btScalar angle = 0;		
 
-			speed = 8.0f;
+			speed = btScalar(1.1) * 800.0f * fDelta;
 
 			if( m_Key[irr::KEY_UP] ) {
 				angle = 0;
@@ -142,24 +155,38 @@ void CHeroPlayer::Update(irr::f32 fTick)
 				btGjkEpaPenetrationDepthSolver epaSolver; //파고들어간정도 구하기
 				btPointCollector gjkOutput; 
 
-				m_pCollMngNode_Kick->getCollisionShape();
+				irr::scene::jz3d::CCollusionMngNode *pCollider = m_pCollMngNode_Kick;//때리는놈
+				btCollisionShape *shape1 =  pCollider->getCollisionShape();
+				btTransform shape_trans1;
+				shape_trans1.setFromOpenGLMatrix(pCollider->getCollisionShapeTransform().pointer());
+
+				irr::scene::jz3d::CCollusionMngNode *pCollidee = CdmkApp::GetPtr()->m_spZombie1->getBodyCollusionObject(); //맞을놈
+				btCollisionShape *shape2 =  pCollidee->getCollisionShape();
+				btTransform shape_trans2;
+				shape_trans2.setFromOpenGLMatrix(pCollidee->getCollisionShapeTransform().pointer());
 				
 
-				////최단거리구하기
-				//{
-				//	btGjkPairDetector convexConvex(
-				//		//static_cast<const btConvexShape *>(m_RigidBodies[0]->getCollisionShape()),
-				//		//static_cast<const btConvexShape *>(m_RigidBodies[1]->getCollisionShape()),
-				//		
-				//		&sGjkSimplexSolver,
-				//		&epaSolver); 
+				//최단거리구하기
+				{					
+					btGjkPairDetector convexConvex(
+						static_cast<const btConvexShape *>(shape1),
+						static_cast<const btConvexShape *>(shape2),						
+						&sGjkSimplexSolver,
+						&epaSolver); 
 
-				//	btGjkPairDetector::ClosestPointInput input; 
-				//	input.m_transformA = m_RigidBodies[0]->getWorldTransform();
-				//	input.m_transformB = m_RigidBodies[1]->getWorldTransform();
+					btGjkPairDetector::ClosestPointInput input; 
+					input.m_transformA = shape_trans1;
+					input.m_transformB = shape_trans2;
 
-				//	convexConvex.getClosestPoints(input, gjkOutput, 0);
-				//}
+					convexConvex.getClosestPoints(input, gjkOutput, 0);					
+					
+					std::cout << gjkOutput.m_distance  << std::endl;					
+				}
+
+				if(gjkOutput.m_hasResult && gjkOutput.m_distance < 0.f)
+				{
+					CdmkApp::GetPtr()->m_spZombie1->Signal(std::string("kicked"),this);										
+				}
 
 				IncStep();
 			}
