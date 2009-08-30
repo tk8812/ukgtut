@@ -226,6 +226,14 @@
 				Name="jz3d"
 				>
 				<File
+					RelativePath="..\irrEdit\source\plugins\jz3dplugins\BulletPhysicsObjectNode.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\irrEdit\source\plugins\jz3dplugins\BulletPhysicsObjectNode.h"
+					>
+				</File>
+				<File
 					RelativePath="..\irrEdit\source\plugins\jz3dplugins\CollusionMngPluginNode.cpp"
 					>
 				</File>
@@ -375,6 +383,10 @@
 				</File>
 				<File
 					RelativePath="..\sdk\ggfsdk\tokenizer.h"
+					>
+				</File>
+				<File
+					RelativePath="..\sdk\ggfsdk\util.h"
 					>
 				</File>
 			</Filter>

@@ -1,11 +1,6 @@
 #pragma once
 
-#include <memory>
 
-#include <irrlicht.h>
-
-
-#include "CBulletObjectAnimator.h"
 
 namespace irr 
 {
@@ -85,6 +80,19 @@ namespace irr
 				virtual void deserializeAttributes(io::IAttributes* in, io::SAttributeReadWriteOptions* options=0);
 
 				virtual void OnAnimate(u32 timeMs);
+
+				static inline CCollusionMngNode *upcast(irr::scene::ISceneNode *pnode)
+				{
+					if(pnode->getType() == TypeID)
+					{
+						return static_cast<CCollusionMngNode *>(pnode);
+					}
+
+					return NULL;
+				}
+
+				//물리 애니메이터 등록
+				bool register2BulletPhysicsWorld(irr::s32 worldID);
 
 
 

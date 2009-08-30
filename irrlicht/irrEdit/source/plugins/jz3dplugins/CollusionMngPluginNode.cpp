@@ -1,10 +1,5 @@
+#include "jz3d.h"
 #include "CollusionMngPluginNode.h"
-
-#pragma warning(disable:4819)
-
-#include "btBulletDynamicsCommon.h"
-#include "BulletCollision/Gimpact/btGImpactShape.h"
-#include "BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h"
 
 
 
@@ -137,8 +132,8 @@ namespace irr
 									irr::core::vector3df(m_GeometryInfo.box.X ,m_GeometryInfo.box.Y ,m_GeometryInfo.box.Z );
 
 								irr::core::aabbox3df box(										
-									-(box_size/2),
-									(box_size/2)
+									-(box_size),
+									(box_size)
 									);									
 
 								driver->draw3DBox(box,draw_color);
@@ -270,6 +265,7 @@ namespace irr
 				}
 
 				//out->addEnum("bones",0,(char **)&m_BoneList[0]);
+				/*out->add*/
 
 			}
 
@@ -317,6 +313,46 @@ namespace irr
 
 				ISceneNode::deserializeAttributes(in, options);				
 			}			
+
+			bool CCollusionMngNode::register2BulletPhysicsWorld(irr::s32 worldID)
+			{				
+
+				irr::s32 TypeID = ESNAT_BULLET_OBJECT;
+				//씬노드 펙토리찾기
+				irr::scene::CBulletAnimatorManager *ani_factory =
+					static_cast<irr::scene::CBulletAnimatorManager *>(ggf::util::findAnimatorFactory(SceneManager,TypeID));				
+
+				
+
+				if(!ani_factory)
+					return false;
+				
+				irr::scene::CBulletObjectAnimatorParams physicsParams;			
+				
+				physicsParams.mass = 0.0f;
+				physicsParams.friction = .5f;
+				physicsParams.restitution = 0.5f;
+
+				scene::CBulletObjectAnimator* levelAnim = 
+					ani_factory->createBulletObjectAnimator(
+					SceneManager,
+					this,
+					worldID,					
+					&m_GeometryInfo,					
+					&physicsParams
+					);
+
+
+				//초기 생성시 로컬 변환만 적용 되므로 다시한번 월드위치를 세팅해준다.
+				{
+					levelAnim->setPosition(getCollisionShapeTransform().getTranslation());
+					levelAnim->setRotation(getCollisionShapeTransform().getRotationDegrees() * irr::core::DEGTORAD);
+				}
+
+				this->addAnimator(levelAnim);
+				levelAnim->drop();		
+				return true;
+			}
 		}
 	}
 }

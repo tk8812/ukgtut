@@ -39,6 +39,11 @@ const c8* const CBulletObjectAnimatorGeometryTypesNames[] =
   0
 };
 
+const c8* const *CBulletObjectAnimator::getGeometryTypesNames()
+{
+	return CBulletObjectAnimatorGeometryTypesNames;
+}
+
 //------------------------------------------------------------------------------
 //! CreateInstance
 //! Creates CBulletObjectAnimator or returns NULL
