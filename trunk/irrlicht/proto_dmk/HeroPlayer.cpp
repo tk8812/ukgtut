@@ -107,7 +107,7 @@ void CHeroPlayer::Update(irr::f32 fDelta)
 			btScalar speed = 0;
 			btScalar angle = 0;		
 
-			speed = btScalar(1.1) * 800.0f * fDelta;
+			speed = btScalar(1.1) * 1800.0f * fDelta;
 
 			if( m_Key[irr::KEY_UP] ) {
 				angle = 0;

@@ -29,7 +29,7 @@ struct btDefaultMotionState;
 namespace irr
 {
 namespace scene
-{
+{	
   class CBulletAnimatorManager;
 
   //------------------------------------------------------------------------------
@@ -212,6 +212,8 @@ namespace scene
 	//ccd관련
 	//!ccd설정
 	void setCCD(btScalar ccdThreshold,btScalar CcdSweptSphereRadius);	
+
+	static const c8* const *getGeometryTypesNames();
 
 	///////////////////////
 

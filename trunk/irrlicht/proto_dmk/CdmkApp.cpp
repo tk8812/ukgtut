@@ -1,9 +1,69 @@
 
 #include "CdmkApp.h"
 
-//#include "FSMObject.h"
 #include "HeroPlayer.h"
 #include "aiPlayer.h"
+
+
+void recursivePhysicsReg(irr::scene::ISceneManager *pSmgr,irr::s32 worldID,irr::scene::ISceneNode *pStartNode)
+{
+	if(pStartNode == 0)
+	{
+		pStartNode = pSmgr->getRootSceneNode();
+	}
+
+	irr::core::list<irr::scene::ISceneNode *>::ConstIterator it = pStartNode->getChildren().begin();
+
+	for(;it != pStartNode->getChildren().end();it++)
+	{
+		recursivePhysicsReg(pSmgr,worldID,*it);
+
+		irr::scene::jz3d::CCollusionMngNode *pcm = irr::scene::jz3d::CCollusionMngNode::upcast((*it));	
+
+		if(pcm)//충돌관리자노드 라면
+		{
+			//물리 등록
+			pcm->register2BulletPhysicsWorld(worldID);
+		}
+		else if( (*it)->getType() == irr::scene::ESNT_MESH ||
+			(*it)->getType() == irr::scene::jz3d::CTiledPlaneNode::TypeID)
+		{
+			//그냥 메쉬를 충돌오브잭트로 만들기 
+
+			irr::scene::CBulletObjectAnimatorGeometry geom;
+			irr::scene::CBulletObjectAnimatorParams physicsParams;
+
+			irr::scene::CBulletAnimatorManager *ani_factory =
+				static_cast<irr::scene::CBulletAnimatorManager *>(ggf::util::findAnimatorFactory(pSmgr,
+				irr::scene::ESNAT_BULLET_OBJECT));
+
+			irr::scene::IMeshSceneNode* pNode = (irr::scene::IMeshSceneNode*)(*it);
+			irr::scene::IMesh* pMesh = pNode->getMesh();		
+
+			// add level static mesh
+			geom.type = scene::CBPAGT_CONCAVE_MESH;
+			geom.mesh.irrMesh = pMesh;		
+			geom.meshFile = pSmgr->getMeshCache()->getMeshFilename(pMesh);
+
+			physicsParams.mass = 0.0f;
+			physicsParams.friction = .5f;
+			physicsParams.restitution = 0.5f;
+
+			scene::CBulletObjectAnimator* levelAnim = 
+				ani_factory->createBulletObjectAnimator(
+				pSmgr,
+				pNode,
+				worldID,
+				&geom,
+				&physicsParams
+				);
+			pNode->addAnimator(levelAnim);		
+			levelAnim->drop();
+		}
+
+		
+	}
+}
 
 
 
@@ -75,53 +135,80 @@ bool CdmkApp::Init()
 		pNode->addAnimator(m_pWorldAnimator);			
 		m_pWorldAnimator->drop();
 	}
+
 	{//물리지형처리초기화
 		irr::scene::ISceneNode *pNode;
 		pNode = m_pSmgr->getSceneNodeFromName("usr/bld");
 
-		irr::core::list<irr::scene::ISceneNode *>::ConstIterator it = pNode->getChildren().begin();
+		recursivePhysicsReg(m_pSmgr,m_pWorldAnimator->getID(),pNode);
 
-		for(;it != pNode->getChildren().end();it++)
-		{
-			if( (*it)->getType() == irr::scene::ESNT_MESH ||
-				(*it)->getType() == irr::scene::jz3d::CTiledPlaneNode::TypeID)
-			{
-				//지형 오브잭트추가
-						
-				irr::scene::CBulletObjectAnimatorGeometry geom;
-				irr::scene::CBulletObjectAnimatorParams physicsParams;
+		
 
-				irr::scene::IMeshSceneNode* pNode = (irr::scene::IMeshSceneNode*)(*it);
+		//irr::core::list<irr::scene::ISceneNode *>::ConstIterator it = pNode->getChildren().begin();
 
-				irr::scene::IMesh* pMesh = pNode->getMesh();
-				irr::scene::ISceneManager *pSmgr = m_pSmgr;
+		//for(;it != pNode->getChildren().end();it++)
+		//{
+		//	if( (*it)->getChildren().getSize() )
+		//	{
+		//		irr::core::list<irr::scene::ISceneNode *>::ConstIterator child_it = (*it)->getChildren().begin();
 
-				// add level static mesh
-				geom.type = scene::CBPAGT_CONCAVE_MESH;
-				geom.mesh.irrMesh = pMesh;
-				//geom.meshFile = pSmgr->getMeshCache()->getMeshFilename(pMesh).c_str();
-				geom.meshFile = pSmgr->getMeshCache()->getMeshFilename(pMesh);
+		//		for(;child_it != (*it)->getChildren().end();child_it++)
+		//		{
+		//			irr::scene::jz3d::CCollusionMngNode *pcm = irr::scene::jz3d::CCollusionMngNode::upcast((*child_it));
 
-				physicsParams.mass = 0.0f;
-				physicsParams.friction = .5f;
-				physicsParams.restitution = 0.5f;
+		//			if(pcm)
+		//			{
+		//				//블릿에등록하기
+		//				pcm->registerBulletPhysicsWorld(m_pWorldAnimator->getID(),m_pBulletPhysicsFactory);
+		//			}				
 
-				scene::CBulletObjectAnimator* levelAnim = 
-					m_pBulletPhysicsFactory->createBulletObjectAnimator(
-					pSmgr,
-					pNode,
-					m_pWorldAnimator->getID(),
-					&geom,
-					&physicsParams
-					);
-				pNode->addAnimator(levelAnim);
-				//levelAnim->setCCD((1.f), .2f * (1.f));
-				//levelAnim->setCCD(1/60,
-				levelAnim->drop();			
+		//		}
 
-			}
+		//	}
 
-		}
+		//	else
+		//	{
+
+		//		if( (*it)->getType() == irr::scene::ESNT_MESH ||
+		//			(*it)->getType() == irr::scene::jz3d::CTiledPlaneNode::TypeID)
+		//		{
+		//			//지형 오브잭트추가
+
+		//			irr::scene::CBulletObjectAnimatorGeometry geom;
+		//			irr::scene::CBulletObjectAnimatorParams physicsParams;
+
+		//			irr::scene::IMeshSceneNode* pNode = (irr::scene::IMeshSceneNode*)(*it);
+
+		//			irr::scene::IMesh* pMesh = pNode->getMesh();
+		//			irr::scene::ISceneManager *pSmgr = m_pSmgr;
+
+		//			// add level static mesh
+		//			geom.type = scene::CBPAGT_CONCAVE_MESH;
+		//			geom.mesh.irrMesh = pMesh;
+		//			//geom.meshFile = pSmgr->getMeshCache()->getMeshFilename(pMesh).c_str();
+		//			geom.meshFile = pSmgr->getMeshCache()->getMeshFilename(pMesh);
+
+		//			physicsParams.mass = 0.0f;
+		//			physicsParams.friction = .5f;
+		//			physicsParams.restitution = 0.5f;
+
+		//			scene::CBulletObjectAnimator* levelAnim = 
+		//				m_pBulletPhysicsFactory->createBulletObjectAnimator(
+		//				pSmgr,
+		//				pNode,
+		//				m_pWorldAnimator->getID(),
+		//				&geom,
+		//				&physicsParams
+		//				);
+		//			pNode->addAnimator(levelAnim);
+		//			//levelAnim->setCCD((1.f), .2f * (1.f));
+		//			//levelAnim->setCCD(1/60,
+		//			levelAnim->drop();			
+
+		//		}
+		//	}
+
+		//}
 	}
 
 
@@ -150,6 +237,38 @@ bool CdmkApp::Init()
 		{
 			return false;
 		}
+	}
+
+	//비고정 오브잭트추가
+	{			
+		irr::scene::CBulletObjectAnimatorGeometry geom;
+		irr::scene::CBulletObjectAnimatorParams physicsParams;
+
+		irr::scene::ISceneNode *pNode = m_pSmgr->addCubeSceneNode(10.f);
+		pNode->setPosition(irr::core::vector3df(0,15,-2));
+		//pNode->setMaterialTexture(0,pVideo->getTexture("../res/irr_exam/t351sml.jpg"));
+		pNode->setMaterialFlag(irr::video::EMF_LIGHTING,false);
+		pNode->setMaterialFlag(irr::video::EMF_WIREFRAME,true);
+
+		geom.type = irr::scene::CBPAGT_BOX;
+		geom.box.X = 5.f;//.sphere.radius = radius;
+		geom.box.Y = 5.f;
+		geom.box.Z = 5.f;			
+
+		physicsParams.mass = 0.5f;
+		physicsParams.gravity = core::vector3df(0, 0, 0);
+		physicsParams.friction = .6f; //마찰값		
+
+
+		irr::scene::CBulletObjectAnimator *pAnim = m_pBulletPhysicsFactory->createBulletObjectAnimator(
+			m_pSmgr,
+			pNode,
+			m_pWorldAnimator->getID(),
+			&geom,
+			&physicsParams
+			);
+		pNode->addAnimator(pAnim);	
+		pAnim->drop();
 	}
 	
 

@@ -173,6 +173,10 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\BulletPhysicsObjectNode.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\CollusionMngPluginNode.cpp"
 				>
 			</File>
@@ -207,6 +211,10 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath=".\BulletPhysicsObjectNode.h"
+				>
+			</File>
+			<File
 				RelativePath=".\CollusionMngPluginNode.h"
 				>
 			</File>
@@ -236,6 +244,74 @@
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
+		</Filter>
+		<Filter
+			Name="sdk"
+			>
+			<Filter
+				Name="bulletanimator"
+				>
+				<File
+					RelativePath="..\..\..\..\sdk\irr_bullet\BulletChracterAnimator.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\sdk\irr_bullet\BulletChracterAnimator.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\sdk\irr_bullet\BulletFpsCamAnimator.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\sdk\irr_bullet\BulletFpsCamAnimator.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\sdk\irr_bullet\CBulletAnimatorManager.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\sdk\irr_bullet\CBulletAnimatorManager.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\sdk\irr_bullet\CBulletObjectAnimator.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\sdk\irr_bullet\CBulletObjectAnimator.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\sdk\irr_bullet\CBulletPhysicsUtils.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\sdk\irr_bullet\CBulletPhysicsUtils.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\sdk\irr_bullet\CBulletWorldAnimator.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\sdk\irr_bullet\CBulletWorldAnimator.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\sdk\irr_bullet\CFollowAnimator.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\sdk\irr_bullet\CThirdPersonAnimator.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\sdk\irr_bullet\CThirdPersonFollowAnimator.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 	</Files>
 	<Globals>
