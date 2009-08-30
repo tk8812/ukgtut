@@ -1,4 +1,5 @@
 // coded by zet
+// extend by gbox3d 2009.8.30
 
 #include "CBulletAnimatorManager.h"
 
@@ -18,14 +19,16 @@ namespace scene
 {
 
 //! Bullet animator types count
-const s32 SceneNodeAnimatorTypeCount = 2;
-//! Names for scene node types
-struct CSceneNodeAnimatorTypeName { ESCENE_NODE_BULLET_ANIMATOR_TYPE type; const c8* name; };
-CSceneNodeAnimatorTypeName const SceneNodeAnimatorTypeNames[] =
-{
-  { ESNAT_BULLET_WORLD, "bulletWorld" },
-  { ESNAT_BULLET_OBJECT, "bulletObject" },
-};
+	const s32 SceneNodeAnimatorTypeCount = ESNAT_BULLET_FOR_COUNT - ESNAT_BULLET_WORLD;
+	//! Names for scene node types
+	struct CSceneNodeAnimatorTypeName { ESCENE_NODE_BULLET_ANIMATOR_TYPE type; const c8* name; };
+	CSceneNodeAnimatorTypeName const SceneNodeAnimatorTypeNames[] =
+	{
+		{ ESNAT_BULLET_WORLD, "bulletWorld" },
+		{ ESNAT_BULLET_OBJECT, "bulletObject" },
+		{ ESNAT_BULLET_OBJECT_FPS_CTRL, "bulletObjectFpsCtrl" },
+		{ ESNAT_BULLET_OBJECT_CHACTER_CTRL, "bulletObjectCharacterCtrl" },
+	};
 
 
 CBulletAnimatorManager::CBulletAnimatorManager(ISceneManager* mgr)
@@ -236,6 +239,23 @@ ISceneNodeAnimator* CBulletAnimatorManager::createSceneNodeAnimator(ESCENE_NODE_
     {
       // create object
       anim = createEmptyBulletObjectAnimator(sceneManager, target);
+    } break;
+
+	//나중에 확장을...
+	case ESNAT_BULLET_OBJECT_FPS_CTRL:
+    {
+      // create object		
+		//anim = new CBulletFpsCamAnimator();
+	
+		//anim = createBulletFpsCamAnimator(sceneManager, target);
+    } break;
+	case ESNAT_BULLET_OBJECT_CHACTER_CTRL:
+    {
+      // create object
+		anim = new CBulletChracterAnimator();
+		target->addAnimator(anim);
+		anim->drop();
+		//anim = createBulletCharcterAnimator(sceneManager, target,0,);
     } break;
   }
 
