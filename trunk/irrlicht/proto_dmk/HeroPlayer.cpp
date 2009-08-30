@@ -11,9 +11,6 @@
 if( 캐릭컨트롤러의 이동방향 앞으로 물체가 근접했는가? == false)
 	m_pChracterAnimator->controlStep_Walker(WalkVelocity);
 
-2. 충돌 물체의 미세한 오차 처리 (마진값과의 관계 정리)
-
-
 */
 
 
