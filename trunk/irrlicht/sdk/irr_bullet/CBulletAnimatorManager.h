@@ -21,9 +21,12 @@ namespace scene
   //! An enumeration for all types of built-in scene node animators
   enum ESCENE_NODE_BULLET_ANIMATOR_TYPE
   {
-    ESNAT_BULLET_WORLD = 777,
+	ESNAT_BULLET_WORLD = ESNAT_COUNT + 666,
     ESNAT_BULLET_OBJECT,
-    ESNAT_BULLET_UNKNOWN
+	ESNAT_BULLET_OBJECT_FPS_CTRL,
+	ESNAT_BULLET_OBJECT_CHACTER_CTRL,
+    ESNAT_BULLET_UNKNOWN,
+	ESNAT_BULLET_FOR_COUNT
   };
 
   //!	Interface making it possible to dynamicly create scene nodes animators 
