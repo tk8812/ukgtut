@@ -40,6 +40,7 @@
 #include "../irredit/source/plugins/jz3dplugins/CollusionMngPluginNode.h"
 #include "../irredit/source/plugins/jz3dplugins/FormatedAnimationNode.h"
 #include "../irredit/source/plugins/jz3dplugins/TiledPlaneNode.h"
+#include "../irredit/source/plugins/jz3dplugins/BulletPhysicsObjectNode.h"
 
 
 //게임플레이어컨트롤 인터패이스

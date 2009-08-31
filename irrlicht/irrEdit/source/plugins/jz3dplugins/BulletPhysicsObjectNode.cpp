@@ -1,6 +1,8 @@
 #include "jz3d.h"
-#include "BulletPhysicsObjectNode.h"
 
+#include "BulletPhysicsObjectNode.h"
+#include "TiledPlaneNode.h"
+#include "Plan1x1SceneNode.h"
 
 
 namespace irr 
@@ -24,7 +26,9 @@ namespace irr
 
 			CBulletPhysicsObjectNode::CBulletPhysicsObjectNode(ISceneNode* parent, ISceneManager* mgr, s32 id)
 				: ISceneNode(parent,mgr,id),
-				m_WorldID(0)
+				m_WorldID(0),
+				m_pWorld(NULL),
+				m_bUseBulletAnimator(false)
 			{
 #ifdef _DEBUG
 				setDebugName(CBulletPhysicsObjectNode::Name);
@@ -33,6 +37,22 @@ namespace irr
 
 				m_strShape = irr::scene::CBulletObjectAnimator::getGeometryTypesNames()[0];
 				m_strPhysicsObjectTypeName = PhysicsObjectTypeNames[0];
+			}
+
+			CBulletPhysicsObjectNode::~CBulletPhysicsObjectNode()
+			{
+				//m_pWorldAnimator->getWorld()->removeRigidBody
+				//m_pWorldAnimator->drop();
+
+				/*irr::scene::CBulletAnimatorManager *ani_factory =
+					static_cast<irr::scene::CBulletAnimatorManager *>(ggf::util::findAnimatorFactory(SceneManager,
+					irr::scene::ESNAT_BULLET_OBJECT));
+				btDynamicsWorld *pWorld = ani_factory->getBulletWorldByID(m_WorldID)->getWorld();*/
+
+				if(m_pWorld  && !m_bUseBulletAnimator)
+				{
+					m_pWorld->removeRigidBody(m_spRigidBody.get());
+				}
 			}
 
 
@@ -73,8 +93,8 @@ namespace irr
 								irr::core::vector3df(m_GeometryInfo.box.X ,m_GeometryInfo.box.Y ,m_GeometryInfo.box.Z );
 
 							irr::core::aabbox3df box(										
-								-(box_size/2),
-								(box_size/2)
+								-(box_size),
+								(box_size)
 								);									
 
 							driver->draw3DBox(box,draw_color);
@@ -160,6 +180,9 @@ namespace irr
 				nb->m_strShape = m_strShape;
 				nb->m_GeometryInfo = m_GeometryInfo;
 				nb->m_PhysicsParam = m_PhysicsParam;
+				nb->m_WorldID = m_WorldID;
+				nb->m_pWorld = m_pWorld;
+				
 
 				nb->drop();
 				return nb;
@@ -292,6 +315,7 @@ namespace irr
 					}
 					else if(m_strShape == L"concave")
 					{
+						out->addString("meshFile", m_GeometryInfo.meshFile.c_str());
 					}
 					else if(m_strShape == L"concave_gimpact")
 					{					
@@ -368,12 +392,13 @@ namespace irr
 							);
 
 					}
+					
 				}
 				else if(m_strPhysicsObjectTypeName == L"bulletObject_static")
 				{
 					m_WorldID = in->getAttributeAsInt("worldID");
 					m_PhysicsParam.mass = 0;//in->getAttributeAsFloat("mass");
-					m_PhysicsParam.ccdThreshold = 0;//in->getAttributeAsFloat("ccdThreshold");
+					//m_PhysicsParam.ccdThreshold = 0;//in->getAttributeAsFloat("ccdThreshold");
 					m_PhysicsParam.linearDamping = 0;//in->getAttributeAsFloat("linearDamping");
 					m_PhysicsParam.angularDamping = 0;//in->getAttributeAsFloat("angularDamping");
 					m_PhysicsParam.friction = in->getAttributeAsFloat("friction");
@@ -414,33 +439,141 @@ namespace irr
 							);
 
 					}
+					else if(m_strShape == L"concave")
+					{
+						m_GeometryInfo.type = CBPAGT_CONCAVE_MESH;
+
+						if( Parent->getType() == irr::scene::ESNT_MESH ||
+							Parent->getType() == irr::scene::jz3d::CTiledPlaneNode::TypeID ||
+							Parent->getType() == irr::scene::jz3d::CPlan1x1SceneNode::TypeID
+							)
+						{
+
+							irr::scene::IMeshSceneNode *pNode = (irr::scene::IMeshSceneNode *)Parent;
+
+							pNode->getMesh();
+							irr::scene::IMesh* pMesh = pNode->getMesh();	
+
+							m_GeometryInfo.mesh.irrMesh = pMesh;
+							m_GeometryInfo.meshFile = SceneManager->getMeshCache()->getMeshFilename(pMesh);
+						}
+						else
+						{
+							m_GeometryInfo.mesh.irrMesh = 0;
+						}
+					}
 
 				}
 
 				ISceneNode::deserializeAttributes(in, options);				
 			}
-			bool CBulletPhysicsObjectNode::register2BulletPhysicsWorld(btCollisionWorld *pWorld)
+
+
+			//!물리오브잭트 추가해주기
+			bool CBulletPhysicsObjectNode::register2BulletPhysicsWorld(btDynamicsWorld *pWorld)
 			{
+				irr::scene::CBulletAnimatorManager *ani_factory =
+						static_cast<irr::scene::CBulletAnimatorManager *>(ggf::util::findAnimatorFactory(SceneManager,TypeID));
+
 				if(pWorld == NULL)
 				{
 					irr::s32 TypeID = ESNAT_BULLET_OBJECT;
 					//씬노드 펙토리찾기
-					irr::scene::CBulletAnimatorManager *ani_factory =
-						static_cast<irr::scene::CBulletAnimatorManager *>(ggf::util::findAnimatorFactory(SceneManager,TypeID));
+					
 					if(ani_factory)
 					{
-						pWorld = ani_factory->getBulletWorldByID(m_WorldID)->getWorld();
-						if(!pWorld)
+						m_pWorld = ani_factory->getBulletWorldByID(m_WorldID)->getWorld();
+
+						if(m_pWorld)
+							return false;
+
+						/*m_pWorldAnimator = ani_factory->getBulletWorldByID(m_WorldID);
+						if(!m_pWorldAnimator)
 						{
 							return false;
-						}
+						}*/
 					}
+				}
+				else
+				{
+					m_pWorld = pWorld;
 				}
 
 				if(m_strPhysicsObjectTypeName == L"bulletObject_static")
-				{
+				{				
+					
+					if(m_GeometryInfo.type == CBPAGT_BOX)
+					{
+						m_spColShape = 
+							std::tr1::shared_ptr<btCollisionShape>(new  btBoxShape(btVector3(m_GeometryInfo.box.X,m_GeometryInfo.box.Y,m_GeometryInfo.box.Z)) );
 
+						btScalar	mass = m_PhysicsParam.mass;
+
+						btVector3 localInertia(0,0,0);								
+						m_spColShape->calculateLocalInertia(mass,localInertia);
+
+						btTransform startTransform;
+						startTransform.setFromOpenGLMatrix(getCollisionShapeTransform().pointer());
+						/*
+						startTransform.setIdentity();
+						startTransform.setOrigin();
+						startTransform.getRotation();
+						*/
+
+						m_spMotionState = std::tr1::shared_ptr<btDefaultMotionState>(new btDefaultMotionState(startTransform));					
+
+						btRigidBody::btRigidBodyConstructionInfo rbInfo(mass,m_spMotionState.get(),m_spColShape.get(),localInertia);
+
+						rbInfo.m_angularDamping = m_PhysicsParam.angularDamping;
+						rbInfo.m_linearDamping = m_PhysicsParam.linearDamping;
+						rbInfo.m_restitution = m_PhysicsParam.restitution;
+						rbInfo.m_friction = m_PhysicsParam.friction;						
+
+						m_spRigidBody = std::tr1::shared_ptr<btRigidBody>(new btRigidBody(rbInfo));		
+
+						m_pWorld->addRigidBody(m_spRigidBody.get());
+
+						
+					}
+					else if(m_GeometryInfo.type == CBPAGT_CONCAVE_MESH && m_GeometryInfo.mesh.irrMesh)
+					{
+						//그냥 메쉬를 충돌오브잭트로 만들기 
+
+						irr::scene::CBulletObjectAnimatorGeometry geom;
+						irr::scene::CBulletObjectAnimatorParams physicsParams;
+
+						irr::scene::CBulletAnimatorManager *ani_factory =
+							static_cast<irr::scene::CBulletAnimatorManager *>(ggf::util::findAnimatorFactory(
+							SceneManager,
+							irr::scene::ESNAT_BULLET_OBJECT)
+							);						
+
+						scene::CBulletObjectAnimator* levelAnim = 
+							ani_factory->createBulletObjectAnimator(
+							SceneManager,
+							this,
+							m_WorldID,
+							&m_GeometryInfo,
+							&m_PhysicsParam
+							);
+
+						m_bUseBulletAnimator = true;
+
+						this->addAnimator(levelAnim);		
+
+						//초기 생성시 로컬 변환만 적용 되므로 다시한번 월드위치를 세팅해준다.
+						{
+							levelAnim->setPosition(getCollisionShapeTransform().getTranslation());
+							levelAnim->setRotation(getCollisionShapeTransform().getRotationDegrees() * irr::core::DEGTORAD);
+						}
+
+						levelAnim->drop();
+					}
 				}
+
+				//else if(m_strPhysicsObjectTypeName == L"bulletObject_static")
+				
+
 				return true;
 			}
 		}

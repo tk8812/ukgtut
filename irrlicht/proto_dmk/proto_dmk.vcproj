@@ -258,6 +258,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\irrEdit\source\plugins\jz3dplugins\jz3d.h"
+					>
+				</File>
+				<File
 					RelativePath="..\irrEdit\source\plugins\jz3dplugins\JZ3DSceneNodeFactory.cpp"
 					>
 				</File>
