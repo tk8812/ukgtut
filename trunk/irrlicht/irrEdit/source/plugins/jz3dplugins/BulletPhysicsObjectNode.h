@@ -16,9 +16,17 @@ namespace irr
 				core::aabbox3d<f32> Box;
 
 				irr::s32 m_WorldID;
+				btDynamicsWorld *m_pWorld;
+				//irr::scene::CBulletWorldAnimator *m_pWorldAnimator;
 				irr::core::stringw m_strShape;
 				irr::core::stringw m_strPhysicsObjectTypeName;
+
+				bool m_bUseBulletAnimator; //수동삭제모드인가
+
+				//물리객체
 				std::tr1::shared_ptr<btCollisionShape> m_spColShape;
+				std::tr1::shared_ptr<btDefaultMotionState>  m_spMotionState;			
+				std::tr1::shared_ptr<btRigidBody> m_spRigidBody;
 
 				CBulletObjectAnimatorGeometry m_GeometryInfo;
 				CBulletObjectAnimatorParams m_PhysicsParam;
@@ -28,6 +36,7 @@ namespace irr
 				static const char *Name;
 
 				CBulletPhysicsObjectNode(ISceneNode* parent, ISceneManager* mgr, s32 id);				
+				virtual ~CBulletPhysicsObjectNode();
 
 				//! returns the axis aligned bounding box of this node
 				virtual const core::aabbox3d<f32>& getBoundingBox() const;
@@ -74,7 +83,7 @@ namespace irr
 				}
 
 				//물리 애니메이터 등록
-				bool register2BulletPhysicsWorld(btCollisionWorld *pWorld);
+				bool register2BulletPhysicsWorld(btDynamicsWorld *pWorld);
 			};
 		}
 	}
