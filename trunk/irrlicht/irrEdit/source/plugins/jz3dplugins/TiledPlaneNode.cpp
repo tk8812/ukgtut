@@ -27,7 +27,7 @@ namespace irr
 
 			{	
 				#ifdef _DEBUG
-					setDebugName("CPlan1x1SceneNode");
+					setDebugName("CTiledPlaneNode");
 				#endif
 				
 					setMesh(setupMesh(""));
