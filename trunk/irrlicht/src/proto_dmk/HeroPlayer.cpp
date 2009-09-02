@@ -102,7 +102,7 @@ void CHeroPlayer::Update(irr::f32 fDelta)
 		{
 			btVector3 WalkVelocity(0,0,0);
 			btScalar speed = 0;
-			btScalar angle = 0;		
+			btScalar angle = 0;
 
 			speed = btScalar(1.1) * 1800.0f * fDelta;
 
