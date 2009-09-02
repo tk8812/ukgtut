@@ -100,16 +100,18 @@ bool CdmkApp::Init()
 		factory->drop();	
 	}
 
+	//물리애니메이터 펙토리등록
+	m_pBulletPhysicsFactory = new irr::scene::CBulletAnimatorManager(m_pSmgr);
+
 	//리소스폴더 지정
 	m_pDevice->getFileSystem()->changeWorkingDirectoryTo("../../res");
 
 	//초기화 코드 삽입...	
 
 	//월드씬로딩
-	m_pSmgr->loadScene("proto_dmk/stage0.irr");
-	{
-		m_pBulletPhysicsFactory = new irr::scene::CBulletAnimatorManager(m_pSmgr);
-
+	m_pSmgr->loadScene("proto_dmk/stage0.irr");	
+	
+	{	
 		//월드 애니메이터 추가
 		irr::scene::ISceneNode *pNode = m_pSmgr->addEmptySceneNode();
 		pNode->setName("usr/scene/physics/world/1");
@@ -124,20 +126,16 @@ bool CdmkApp::Init()
 			&worldParams
 			);
 		//중력은 기본으로 y 축으로 -9.8			
-		pNode->addAnimator(m_pWorldAnimator);			
-		
-		//파괴자에서 해제위치를 수동으로 정해주기위해서.
-		//m_pWorldAnimator->drop();
-		
+		pNode->addAnimator(m_pWorldAnimator);				
+
+		//파괴자에서 해제위치를 수동으로 정해주기위해서.m_pWorldAnimator->drop() 하지 않는다.		
 	}
 
 	{//물리지형처리초기화
 		irr::scene::ISceneNode *pNode;
 		pNode = m_pSmgr->getSceneNodeFromName("usr/bld");
 
-		recursivePhysicsReg(m_pSmgr,m_pWorldAnimator->getID(),pNode);
-
-		
+		recursivePhysicsReg(m_pSmgr,m_pWorldAnimator->getID(),pNode);		
 
 		//irr::core::list<irr::scene::ISceneNode *>::ConstIterator it = pNode->getChildren().begin();
 

@@ -197,7 +197,7 @@ void CHeroPlayer::Update(irr::f32 fDelta)
 		{
 			if(m_pNode->IsActionFinished())
 			{
-				SetStatus(FSM_WALK);
+				SetStatus(FSM_STAND);
 				
 			}			
 		}
