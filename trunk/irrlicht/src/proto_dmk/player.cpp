@@ -46,7 +46,13 @@ bool CPlayer::Init(irr::scene::ISceneNode *pNode)
 		m_pNode->addAnimator(pAnim);	
 
 		m_pChracterAnimator = pAnim;	
-		m_pChracterAnimator->setLocalPosition(-m_pCollMngNode->getAbsolutePosition());			
+
+		//부모노드의 스케일변환을 고려하기 위해서 한단계위의 스캐일변환을 곱해준다.
+		m_pChracterAnimator->setLocalPosition(
+			-(m_pCollMngNode->getPosition() * m_pCollMngNode->getParent()->getScale())
+			);
+
+		//m_pChracterAnimator->setLocalPosition(-m_pCollMngNode->getPosition());			
 		//m_pChracterAnimator->getRigidBody()->setDamping(.9,0);
 
 		pAnim->drop();	

@@ -209,6 +209,12 @@ namespace scene
 		//r//eturn sceneNode;
 	}
 
+	//!가시화 오브잭트와 물리객체간의 중심점차 재정의
+	inline void setLocalPosition(irr::core::vector3df pos)
+	{
+		m_LocalPos = pos;
+	}
+
 	//ccd관련
 	//!ccd설정
 	void setCCD(btScalar ccdThreshold,btScalar CcdSweptSphereRadius);	
@@ -269,6 +275,8 @@ namespace scene
 
     CBulletAnimatorManager*      bulletMgr;
     s32                          bulletWorldID;
+
+	irr::core::vector3df m_LocalPos;
   };
 
 } // end namespace scene

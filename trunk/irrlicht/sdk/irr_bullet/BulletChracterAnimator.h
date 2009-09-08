@@ -13,7 +13,7 @@ class CBulletChracterAnimator :
 	btVector3 m_raySource[2];
 	btVector3 m_rayTarget[2];
 	btScalar m_rayLambda[2];
-	irr::core::vector3df m_LocalPos;
+	//irr::core::vector3df m_LocalPos;
 	//btVector3 m_rayNormal[2];
 	
 public:
@@ -29,11 +29,6 @@ public:
       CBulletObjectAnimatorParams* pPhysicsParam
     );
 	
-	//캐릭터 중점 재정의
-	void setLocalPosition(irr::core::vector3df pos)
-	{
-		m_LocalPos = pos;
-	}
 
     virtual void animateNode(ISceneNode* node, u32 timeMs);
 
