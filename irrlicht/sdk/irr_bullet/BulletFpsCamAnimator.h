@@ -82,8 +82,7 @@ namespace scene
 
 		btVector3 m_raySource[2];
 		btVector3 m_rayTarget[2];
-		btScalar m_rayLambda[2];
-		irr::core::vector3df m_LocalPos;
+		btScalar m_rayLambda[2];		
 
 		struct SCamKeyMap
 		{
