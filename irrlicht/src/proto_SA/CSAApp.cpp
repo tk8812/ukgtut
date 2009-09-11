@@ -98,7 +98,7 @@ bool CSAApp::Init()
 	//초기화 코드 삽입...	
 
 	//월드씬로딩
-	m_pSmgr->loadScene("proto_dmk/stage0.irr");	
+	m_pSmgr->loadScene("proto_SA/stage0.irr");	
 	
 	{	
 		//월드 애니메이터 추가
@@ -115,7 +115,7 @@ bool CSAApp::Init()
 			&worldParams
 			);
 		//중력은 기본으로 y 축으로 -9.8			
-		pNode->addAnimator(m_pWorldAnimator);				
+		pNode->addAnimator(m_pWorldAnimator);
 
 		//파괴자에서 해제위치를 수동으로 정해주기위해서.m_pWorldAnimator->drop() 하지 않는다.		
 	}
