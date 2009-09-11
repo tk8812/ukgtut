@@ -91,7 +91,7 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
-			InheritedPropertySheets="..\sdk\Property Sheets\bullet_debug.vsprops;..\sdk\Property Sheets\irrlicht.vsprops;..\sdk\Property Sheets\JGAGenernal.vsprops;..\sdk\Property Sheets\irr_bullet.vsprops;..\sdk\Property Sheets\ggf.vsprops;..\sdk\Property Sheets\irredit_plugin.vsprops"
+			InheritedPropertySheets="..\sdk\Property Sheets\irrlicht.vsprops;..\sdk\Property Sheets\JGAGenernal.vsprops;..\sdk\Property Sheets\irr_bullet.vsprops;..\sdk\Property Sheets\ggf.vsprops;..\sdk\Property Sheets\irredit_plugin.vsprops;..\sdk\Property Sheets\bullet_release.vsprops"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
 			>
