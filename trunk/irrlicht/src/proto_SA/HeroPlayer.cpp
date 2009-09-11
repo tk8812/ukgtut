@@ -108,6 +108,13 @@ void CHeroPlayer::Update(irr::f32 fDelta)
 		break;
 	case CHeroPlayer::FSM_STAND:
 		{
+			if( m_Key[irr::KEY_LBUTTON] )
+			{
+				m_Key[irr::KEY_LBUTTON] = false;
+
+
+
+			}
 		}		
 		break;
 	}
