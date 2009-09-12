@@ -57,6 +57,8 @@ bool CAIPlayer::Init(irr::scene::ISceneNode *pNode)
 				-(m_pCollMngNode->getPosition() * m_pCollMngNode->getParent()->getScale())
 				);
 
+			m_pcloBody = m_pChracterAnimator->getRigidBody();
+
 			pAnim->drop();
 
 			return true;
@@ -75,17 +77,20 @@ bool CAIPlayer::Init(irr::scene::ISceneNode *pNode)
 
 void CAIPlayer::Signal(std::string strSignal,void *pParam)
 {
-	if(strSignal == "kicked")
+	if(!isDie())
 	{
-		CPlayer *doer = (CPlayer *)pParam;
-		irr::core::vector3df vdodir = doer->getPosition() - getPosition();
-		vdodir.normalize();
+		if(strSignal == "hit")
+		{
+			CPlayer *doer = (CPlayer *)pParam;
+			irr::core::vector3df vdodir = doer->getPosition() - getPosition();
+			vdodir.normalize();
 
-		irr::core::vector3df vblowDir(-vdodir.X,0,-vdodir.Z);		
-		m_pChracterAnimator->applyImpulse(700.f * vblowDir);
-		m_pChracterAnimator->applyImpulse(70.f * irr::core::vector3df(0,1,0));
+			irr::core::vector3df vblowDir(-vdodir.X,0,-vdodir.Z);		
+			m_pChracterAnimator->applyImpulse(700.f * vblowDir);
+			m_pChracterAnimator->applyImpulse(70.f * irr::core::vector3df(0,1,0));
 
-		SetStatus(FSM_ATTACKED);
+			SetStatus(FSM_ATTACKED);
+		}
 	}
 }
 

@@ -1,5 +1,6 @@
 #pragma once
 
+
 class CHeroPlayer : public CPlayer,public irr::IEventReceiver
 	
 {
@@ -9,6 +10,7 @@ class CHeroPlayer : public CPlayer,public irr::IEventReceiver
 
 public:
 
+	std::map<btCollisionObject *,SP_IFSMObject> m_mapBullets;
 	
 
 	CHeroPlayer();
@@ -20,6 +22,6 @@ public:
 	virtual bool OnEvent(const irr::SEvent& event);	
 	virtual bool Init(irr::scene::ISceneNode *pNode);
 
-	
+	inline virtual irr::core::vector3df getPosition() {	return m_pChracterAnimator->getPosition();}
 
 };

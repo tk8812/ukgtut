@@ -1,5 +1,7 @@
 #pragma once
 
+
+
 class IFSMObject
 {
 private:
@@ -55,3 +57,7 @@ public:
 	
 	
 };
+
+typedef std::tr1::shared_ptr<IFSMObject> SP_IFSMObject;
+typedef IFSMObject* LP_IFSMObject;
+typedef IFSMObject** LPLP_IFSMObject;

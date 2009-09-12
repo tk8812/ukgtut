@@ -1,5 +1,6 @@
 #include "CSAApp.h"
 
+#include "ChsBullet.h"
 #include "HeroPlayer.h"
 
 /*
@@ -28,7 +29,7 @@ CHeroPlayer::CHeroPlayer()
 
 CHeroPlayer::~CHeroPlayer(void)
 {
-		
+			
 }
 
 bool CHeroPlayer::Init(irr::scene::ISceneNode *pNode)
@@ -52,8 +53,7 @@ bool CHeroPlayer::Init(irr::scene::ISceneNode *pNode)
 
 			physicsParams.mass = 70.f; //70kg
 			physicsParams.gravity = core::vector3df(0, 0, 0);
-			physicsParams.friction = 10.f; //마찰값		
-
+			physicsParams.friction = 10.f; //마찰값	
 			
 			//현재 카메라얻기
 			irr::scene::ISceneNode *pCamNode = pSmgr->getActiveCamera();
@@ -74,11 +74,7 @@ bool CHeroPlayer::Init(irr::scene::ISceneNode *pNode)
 		return true;
 	}
 	
-	/*if(CPlayer::Init(pNode))
-	{		
-		return true;
-	}
-	*/
+	
 	return false;
 }
 
@@ -89,7 +85,9 @@ void CHeroPlayer::Update(irr::f32 fDelta)
 	irr::scene::ISceneManager *pSmgr = CSAApp::GetPtr()->m_pSmgr;
 	irr::IrrlichtDevice *pDevice = CSAApp::GetPtr()->m_pDevice;
 	irr::scene::CBulletAnimatorManager* pBulletPhysicsFactory = CSAApp::GetPtr()->m_pBulletPhysicsFactory; 
-	irr::scene::CBulletWorldAnimator* pWorldAnimator = CSAApp::GetPtr()->m_pWorldAnimator;	
+	irr::scene::CBulletWorldAnimator* pWorldAnimator = CSAApp::GetPtr()->m_pWorldAnimator;		
+
+	m_pChracterAnimator->setMoveSpeed( 1.1f * 1800.f * fDelta ); // 시속 18키로 정도
 
 	switch(GetStatus())
 	{
@@ -101,23 +99,132 @@ void CHeroPlayer::Update(irr::f32 fDelta)
 			m_pChracterAnimator->setPosition(pos_Spwan);
 			m_pChracterAnimator->zeroForces();
 			m_pChracterAnimator->setLocalPosition(irr::core::vector3df(0,5,0));
-			m_pChracterAnimator->setMoveSpeed(1.1f);			
+			//m_pChracterAnimator->setMoveSpeed(1.1f);			
 
 			SetStatus(FSM_STAND);
 		}
 		break;
 	case CHeroPlayer::FSM_STAND:
 		{
+						
 			if( m_Key[irr::KEY_LBUTTON] )
 			{
+				irr::scene::ISceneManager *pSmgr = pDevice->getSceneManager();
+				irr::core::position2di mpos = pDevice->getCursorControl()->getPosition();				
+
+				irr::core::line3df Ray;
+				irr::core::vector3df vAim;
+
+				Ray = pDevice->getSceneManager()->getSceneCollisionManager()->getRayFromScreenCoordinates(mpos);
+
+				vAim = Ray.getVector();
+				vAim.normalize(); 	
+
+				ChsBullet *pBullet = new ChsBullet();
+
+				ChsBullet::Params param_bullet;
+
+				param_bullet.Energy = 10.f;
+				param_bullet.mass = .1f;
+				param_bullet.vAim = vAim;				
+				param_bullet.vInitPos = getPosition() + (irr::core::vector3df(0,5,0) + vAim * 3); //총구 위치 적용된 발사시작위치
+				
+				pBullet->Init(&param_bullet); //총알 초기화
+
+				m_mapBullets[pBullet->m_pAnim->getRigidBody()] = SP_IFSMObject(pBullet);
+
 				m_Key[irr::KEY_LBUTTON] = false;
-
-
-
 			}
 		}		
 		break;
 	}
+
+
+	
+	{
+		btDynamicsWorld *pWorld = pWorldAnimator->getWorld();
+		int num = pWorld->getDispatcher()->getNumManifolds();		
+
+		for(int i=0;i<num;i++)
+		{
+			btPersistentManifold *contactManifold = pWorld->getDispatcher()->getManifoldByIndexInternal(i);			
+			
+			if(contactManifold->getNumContacts() > 0)
+			{				
+
+				btCollisionObject* obA = static_cast<btCollisionObject*>(contactManifold->getBody0());
+				btCollisionObject* obB = static_cast<btCollisionObject*>(contactManifold->getBody1());
+
+				//충돌한 오브잭트 찾기
+				ChsBullet *pBullet = NULL;
+				if(m_mapBullets.count(obB) != 0)
+				{
+					pBullet = (ChsBullet *)m_mapBullets[obB].get();
+				}			
+				if(m_mapBullets.count(obA) != 0)
+				{
+					pBullet = (ChsBullet *)m_mapBullets[obA].get();				
+				}			
+
+				if(pBullet)
+				{
+					pBullet->Signal("hit",NULL);
+
+					btCollisionObject *pTar = CSAApp::Get().m_spZombie1->m_pcloBody; //몸통 물리 충돌오브잭트 얻기
+
+					//해당타겟이 명중인지?
+					if(obA == pTar || obB == pTar)
+					{
+						CSAApp::Get().m_spZombie1->Signal("hit",pBullet);
+					}					
+				}
+			}
+
+		}
+
+
+		/*{
+			std::map<btCollisionObject*, std::tr1::shared_ptr<CCanonBall>>::iterator it = m_mapCanonBall.begin();
+			while(it != m_mapCanonBall.end())
+			{
+				it->second->OnAnimate(fElapsedTime);
+				if(it->second->isDie())
+				{
+					m_mapCanonBall.erase(it++);
+					if(m_mapCanonBall.empty())
+						break;
+				}
+				else
+					it++;
+			}
+
+		}	*/
+
+		//총알처리
+		{
+			std::map<btCollisionObject *,SP_IFSMObject>::iterator it = m_mapBullets.begin();
+			while(it != m_mapBullets.end())
+			{			
+
+				if(it->second->isDie())
+				{				
+					m_mapBullets.erase(it++);
+					if(m_mapBullets.empty())
+						break;
+				}
+				else
+				{
+					it->second->Update(fDelta);
+					it++;
+				}
+
+			}
+		}
+
+	}
+
+	
+
 }
 
 void CHeroPlayer::Signal(std::string strSignal, void *pParam)
@@ -148,6 +255,14 @@ bool CHeroPlayer::OnEvent(const irr::SEvent &event)
 		break;
 	case irr::EET_MOUSE_INPUT_EVENT:
 		{
+			if(event.MouseInput.Event == irr::EMIE_LMOUSE_PRESSED_DOWN)
+			{
+				m_Key[irr::KEY_LBUTTON] = true;
+			}
+			else if(event.MouseInput.Event == irr::EMIE_LMOUSE_LEFT_UP)
+			{
+				m_Key[irr::KEY_LBUTTON] = false;
+			}
 
 		}
 		break;

@@ -194,8 +194,8 @@ bool CSAApp::Init()
 	}
 
 	//¿ÀºêÀèÆ®¾À·Îµù
-	m_pSmgr->loadScene("proto_dmk/obj_ninja.irr");
-	m_pSmgr->loadScene("proto_dmk/obj_zombie.irr");
+	m_pSmgr->loadScene("proto_sa/obj_ninja.irr");
+	m_pSmgr->loadScene("proto_sa/obj_zombie.irr");
 
 //	m_pSmgr->getRootSceneNode()->OnAnimate(0);
 

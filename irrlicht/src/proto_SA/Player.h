@@ -18,12 +18,15 @@ protected:
 
 public:
 
+	btCollisionObject *m_pcloBody;
+
 	enum {
 		FSM_READY,
 		FSM_STAND,
 		FSM_WALK,
 		FSM_KICK,
 		FSM_ATTACKED,
+		FSM_DIE,
 		FSM_COUNT
 	};
 
@@ -40,6 +43,12 @@ public:
 	{
 		return m_pCollMngNode_Body;
 	}
+
+	/*btCollisionObject *getBodyCollusionObject()
+	{
+		return m_pcloBody;
+	}*/
+	inline virtual bool isDie() {if(GetStatus() == FSM_DIE)return true;else return false;}
 
 	virtual bool Init(irr::scene::ISceneNode *pNode);	
 
