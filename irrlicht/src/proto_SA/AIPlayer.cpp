@@ -94,7 +94,7 @@ void CAIPlayer::Signal(std::string strSignal,void *pParam)
 	}
 }
 
-void CAIPlayer::Update(irr::f32 fTick)
+void CAIPlayer::Update(irr::f32 fDelta)
 {
 	irr::scene::ISceneManager *pSmgr = CSAApp::GetPtr()->m_pSmgr;
 	irr::IrrlichtDevice *pDevice = CSAApp::GetPtr()->m_pDevice;
@@ -119,16 +119,52 @@ void CAIPlayer::Update(irr::f32 fTick)
 	case FSM_STAND:		
 		if(GetStep() == 0)
 		{
-			m_pNode->changeAction("stand");			
-
+			m_pNode->changeAction("stand");
 			IncStep();
+			m_accTick = 0; //누적시간 리셋
 		}
 		else if(GetStep() == 1)
-		{			
+		{		
+			if(m_accTick >= 2.0f) //2초경과
+			{
+				SetStatus(FSM_WALK);
+				
+				m_vTargetDir.X = (rand() % 1000) / 1000.f - 0.5f;
+				m_vTargetDir.Z = (rand() % 1000) / 1000.f - 0.5f;
+				m_vTargetDir.Y = 0;
 
+				m_vTargetDir.normalize();
+
+			}
 		}
 		break;
 	case FSM_WALK:
+		if(GetStep() == 0)
+		{
+			m_pNode->changeAction("walk");
+			IncStep();
+
+			m_accTick = 0; //누적시간 리셋
+		}
+		else if(GetStep() == 1)
+		{
+			if(m_accTick >= 3.0f) //3초경과
+			{
+				SetStatus(FSM_STAND);
+			}
+			else
+			{
+				btVector3 WalkVelocity(0,0,0);
+				btScalar speed = 0;			
+				speed = btScalar(1.1) * 180.0f * fDelta;
+
+				btVector3 btDir;
+				Irrlicht2Bullet(m_vTargetDir,btDir);
+
+				WalkVelocity = btDir * speed;
+				m_pChracterAnimator->controlStep_Walker(WalkVelocity);
+			}			
+		}
 		break;
 	case FSM_KICK:
 		break;
@@ -148,4 +184,7 @@ void CAIPlayer::Update(irr::f32 fTick)
 		}
 		break;	
 	}
+
+	//누적 타이머
+	m_accTick += fDelta;
 }
