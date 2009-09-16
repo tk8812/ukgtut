@@ -48,8 +48,8 @@ bool CHeroPlayer::Init(irr::scene::ISceneNode *pNode)
 
 		{
 			m_pCollMngNode = (irr::scene::jz3d::CCollusionMngNode *)pSmgr->getSceneNodeFromName("col_main",m_pNode);//캐릭터볼륨얻기(이동제어용)
-			m_pCollMngNode_Kick = (irr::scene::jz3d::CCollusionMngNode *)pSmgr->getSceneNodeFromName("col_kick",m_pNode); //발차기 충돌정보
-			m_pCollMngNode_Body = (irr::scene::jz3d::CCollusionMngNode *)pSmgr->getSceneNodeFromName("col_body",m_pNode); //몸통 충돌정보		
+			//m_pCollMngNode_Kick = (irr::scene::jz3d::CCollusionMngNode *)pSmgr->getSceneNodeFromName("col_kick",m_pNode); //발차기 충돌정보
+			//m_pCollMngNode_Body = (irr::scene::jz3d::CCollusionMngNode *)pSmgr->getSceneNodeFromName("col_body",m_pNode); //몸통 충돌정보		
 
 			physicsParams.mass = 70.f; //70kg
 			physicsParams.gravity = core::vector3df(0, 0, 0);
@@ -140,7 +140,7 @@ void CHeroPlayer::Update(irr::f32 fDelta)
 	}
 
 
-	
+	//탄도 충돌 검출	
 	{
 		btDynamicsWorld *pWorld = pWorldAnimator->getWorld();
 		int num = pWorld->getDispatcher()->getNumManifolds();		
@@ -182,25 +182,8 @@ void CHeroPlayer::Update(irr::f32 fDelta)
 
 		}
 
-
-		/*{
-			std::map<btCollisionObject*, std::tr1::shared_ptr<CCanonBall>>::iterator it = m_mapCanonBall.begin();
-			while(it != m_mapCanonBall.end())
-			{
-				it->second->OnAnimate(fElapsedTime);
-				if(it->second->isDie())
-				{
-					m_mapCanonBall.erase(it++);
-					if(m_mapCanonBall.empty())
-						break;
-				}
-				else
-					it++;
-			}
-
-		}	*/
-
-		//총알처리
+		
+		//총알 컨테이너 관리
 		{
 			std::map<btCollisionObject *,SP_IFSMObject>::iterator it = m_mapBullets.begin();
 			while(it != m_mapBullets.end())

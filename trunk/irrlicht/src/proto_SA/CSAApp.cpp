@@ -123,90 +123,24 @@ bool CSAApp::Init()
 	{//물리지형처리초기화
 		irr::scene::ISceneNode *pNode;
 		pNode = m_pSmgr->getSceneNodeFromName("usr/bld");
-
-		recursivePhysicsReg(m_pSmgr,m_pWorldAnimator->getID(),pNode);		
-
-		//irr::core::list<irr::scene::ISceneNode *>::ConstIterator it = pNode->getChildren().begin();
-
-		//for(;it != pNode->getChildren().end();it++)
-		//{
-		//	if( (*it)->getChildren().getSize() )
-		//	{
-		//		irr::core::list<irr::scene::ISceneNode *>::ConstIterator child_it = (*it)->getChildren().begin();
-
-		//		for(;child_it != (*it)->getChildren().end();child_it++)
-		//		{
-		//			irr::scene::jz3d::CCollusionMngNode *pcm = irr::scene::jz3d::CCollusionMngNode::upcast((*child_it));
-
-		//			if(pcm)
-		//			{
-		//				//블릿에등록하기
-		//				pcm->registerBulletPhysicsWorld(m_pWorldAnimator->getID(),m_pBulletPhysicsFactory);
-		//			}				
-
-		//		}
-
-		//	}
-
-		//	else
-		//	{
-
-		//		if( (*it)->getType() == irr::scene::ESNT_MESH ||
-		//			(*it)->getType() == irr::scene::jz3d::CTiledPlaneNode::TypeID)
-		//		{
-		//			//지형 오브잭트추가
-
-		//			irr::scene::CBulletObjectAnimatorGeometry geom;
-		//			irr::scene::CBulletObjectAnimatorParams physicsParams;
-
-		//			irr::scene::IMeshSceneNode* pNode = (irr::scene::IMeshSceneNode*)(*it);
-
-		//			irr::scene::IMesh* pMesh = pNode->getMesh();
-		//			irr::scene::ISceneManager *pSmgr = m_pSmgr;
-
-		//			// add level static mesh
-		//			geom.type = scene::CBPAGT_CONCAVE_MESH;
-		//			geom.mesh.irrMesh = pMesh;
-		//			//geom.meshFile = pSmgr->getMeshCache()->getMeshFilename(pMesh).c_str();
-		//			geom.meshFile = pSmgr->getMeshCache()->getMeshFilename(pMesh);
-
-		//			physicsParams.mass = 0.0f;
-		//			physicsParams.friction = .5f;
-		//			physicsParams.restitution = 0.5f;
-
-		//			scene::CBulletObjectAnimator* levelAnim = 
-		//				m_pBulletPhysicsFactory->createBulletObjectAnimator(
-		//				pSmgr,
-		//				pNode,
-		//				m_pWorldAnimator->getID(),
-		//				&geom,
-		//				&physicsParams
-		//				);
-		//			pNode->addAnimator(levelAnim);
-		//			//levelAnim->setCCD((1.f), .2f * (1.f));
-		//			//levelAnim->setCCD(1/60,
-		//			levelAnim->drop();			
-
-		//		}
-		//	}
-
-		//}
+		recursivePhysicsReg(m_pSmgr,m_pWorldAnimator->getID(),pNode);				
 	}
 
 	//오브잭트씬로딩
-	m_pSmgr->loadScene("proto_sa/obj_ninja.irr");
+	//m_pSmgr->loadScene("proto_sa/obj_ninja.irr");
+	m_pSmgr->loadScene("proto_sa/obj_fpsbody1.irr");
 	m_pSmgr->loadScene("proto_sa/obj_zombie.irr");
 
 //	m_pSmgr->getRootSceneNode()->OnAnimate(0);
 
 	irr::scene::ICameraSceneNode *pCam = m_pSmgr->addCameraSceneNode(0,irr::core::vector3df(0,58,-30),irr::core::vector3df(0,0,0));	
 
-	//주인공 닌자
+	//주인공
 	{
-		CHeroPlayer *pHero = new CHeroPlayer();		
+		CHeroPlayer *pHero = new CHeroPlayer();
 		m_spHeroPlayer = SP_PLAYER(pHero);		
 
-		irr::scene::ISceneNode *pNode = m_pSmgr->getSceneNodeFromName("usr/obj/b3d/ninja/blue");
+		irr::scene::ISceneNode *pNode = m_pSmgr->getSceneNodeFromName("usr/obj/fpsbody/1");
 
 		if( pNode && pHero->Init(pNode) != true)
 			return false;
