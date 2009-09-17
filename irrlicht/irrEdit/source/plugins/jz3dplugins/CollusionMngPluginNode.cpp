@@ -1,7 +1,12 @@
 #include "jz3d.h"
 #include "CollusionMngPluginNode.h"
 
+/*
+수정 로그:
 
+gbox3d: 9월 17일 , 클로닝시 충돌볼륨 얻어오지못했던 버그수정
+
+*/
 
 namespace irr 
 {
@@ -226,6 +231,8 @@ namespace irr
 				nb->m_strBone = m_strBone;
 				nb->m_strShape = m_strShape;
 				nb->m_GeometryInfo = m_GeometryInfo;
+				nb->m_spColShape = m_spColShape; //어차피 클로닝된 오브잭트들의 충돌 볼륨은 같으므로 하나로 정보를 공유한다.
+				//nb->m_matJoint = nb->m_matJoint; //조인트변환은 매번 변하니 의미없음
 
 				nb->drop();
 				return nb;
