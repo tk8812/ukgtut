@@ -48,8 +48,7 @@ public:
 
 	irr::scene::ISceneNode *m_pSpawnNode;
 
-	//물리용
-	irr::scene::CBulletAnimatorManager* m_pBulletPhysicsFactory;
+	//물리용	
 	irr::scene::ISceneNode*  m_pWorldNode;
 	irr::scene::CBulletWorldAnimator* m_pWorldAnimator;
 	//irr::scene::CBulletObjectAnimator* m_pObjectAnimator;	//테스트용

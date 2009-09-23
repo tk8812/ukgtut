@@ -365,6 +365,9 @@ public:
 };
 
 
+//객체 해제순서는
+//클래스의 파괴자가 호출된후 멤버들의 파괴자가 차례로 호출된다.
+
 class CBycleApp : 
 	public irr::IEventReceiver,
 	public ggf::oop::Singleton<CBycleApp>
@@ -388,6 +391,8 @@ public:
 	irr::gui::IGUIFont* m_pFont_Arial36;
 	irr::gui::IGUIFont* m_pFont_ms12;
 
+	irr::scene::CBulletAnimatorManager* m_pBulletPhysicsFactory;
+
 #ifdef USE_NIIO
 
 	irr::f32 m_fAI_1;
@@ -405,11 +410,12 @@ public:
 
 	irr::u32 m_uIODelayTick;
 
-	//CNiDAQmxTask m_niDaqTask;
-	//CNiDAQmxAnalogSingleChannelReader *m_spNiASDaqReader;
+	
 
 	CBycleApp()
 	{
+		::_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF); //메모리릭 탐지
+
 		m_nBestFps = 0;	
 		m_nLastFps = 0;
 		m_nStage = 0;
@@ -420,17 +426,9 @@ public:
 	}
 
 	~CBycleApp()
-	{		
-		
-	}
-
-	/*static CBycleApp* ms_pBycleApp;
-	static int Create();
-	static void Terminate();
-	static CBycleApp* Get()
-	{
-		return ms_pBycleApp;
-	}*/
+	{	
+		m_pBulletPhysicsFactory->drop();		
+	}	
 
 	
 	//게임 리소스 씬정보 생성 및 어플리캐이션 초기화	

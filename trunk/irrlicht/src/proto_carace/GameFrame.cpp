@@ -7,8 +7,6 @@ using namespace irr;
 
 #include "irr_utill.h"
 
-//CGameFrame* CGameFrame::ms_pGameFrame;
-
 void recursivePhysicsReg(irr::scene::ISceneManager *pSmgr,irr::s32 worldID,irr::scene::ISceneNode *pStartNode)
 {
 	if(pStartNode == 0)
@@ -51,6 +49,8 @@ void recursivePhysicsReg(irr::scene::ISceneManager *pSmgr,irr::s32 worldID,irr::
 
 
 
+
+
 CGameFrame::CGameFrame(void)
 :CEsenFrame(),
 m_pmsGroundSelecter(0),
@@ -70,7 +70,7 @@ m_pmsRoadSelecter(0),
 m_pmsWallSelecter(0)
 //m_pTsFinishLine(0)
 {
-				
+	
 }
 
 CGameFrame::~CGameFrame(void)
@@ -100,11 +100,17 @@ void CGameFrame::Release()
 		if(m_pmsWallSelecter)
 			m_pmsWallSelecter->drop();
 		//if(m_pTsFinishLine)
-		//	m_pTsFinishLine->drop();	
+		//	m_pTsFinishLine->drop();			
 	}	
 
 	irr::scene::ISceneManager *pSmgr = CBycleApp::Get().m_System.m_pSmgr;
-	pSmgr->clear();	
+	pSmgr->clear();		
+
+	//월드를 물리 관리자겸 펙토리에서 일단 제거해주고
+	CBycleApp::GetPtr()->m_pBulletPhysicsFactory->removeWorld(m_pWorldAnimator);	
+
+	//월드를 제거한다.
+	m_pWorldAnimator->drop();
 
 	m_bEnable = false;
 
@@ -162,7 +168,7 @@ void CGameFrame::Apply(irr::u32 timeMs)
 			}			
 
 			//물리 스탭
-			m_pBulletPhysicsFactory->OnUpdate(timeMs*1000);
+			CBycleApp::GetPtr()->m_pBulletPhysicsFactory->OnUpdate(timeMs*1000);
 			//플래이어 컨트롤
 			m_ThisBycle.Apply(timeMs);
 
@@ -348,7 +354,7 @@ void CGameFrame::Octree2Bullet(irr::scene::ISceneNode *pRoadRoot)
 					physicsParams.mass = 0.0f;
 
 					scene::CBulletObjectAnimator* levelAnim = 
-						m_pBulletPhysicsFactory->createBulletObjectAnimator(
+						CBycleApp::GetPtr()->m_pBulletPhysicsFactory->createBulletObjectAnimator(
 						pSmgr,
 						pNode,
 						m_pWorldAnimator->getID(),
@@ -388,26 +394,7 @@ void CGameFrame::LoadRes()
 		CBycleApp::Get().m_System.m_pSmgr->loadScene(stageRes.m_strFile.c_str());	//"../res/stage02.xml");
 
 		CBycleApp::GetPtr()->m_System.m_pDevice->getFileSystem()->changeWorkingDirectoryTo(strOldPath.c_str());
-	}
-
-	//자전거 로드가 있는지 검사하기
-	/*if(!CBycleApp::Get().m_System.m_pSmgr->getSceneNodeFromName(stageRes.m_isoBycle.m_strMainObjNodeName.c_str()) )
-	{
-		std::string strPath = CBycleApp::GetPtr()->m_System.m_ConfigData.m_strResFolder;
-		strPath += "/res/";
-		std::string strOldPath;
-		strOldPath = CBycleApp::GetPtr()->m_System.m_pDevice->getFileSystem()->getWorkingDirectory();
-
-		CBycleApp::GetPtr()->m_System.m_pDevice->getFileSystem()->changeWorkingDirectoryTo(strPath.c_str());
-
-		CBycleApp::Get().m_System.m_pSmgr->loadScene(stageRes.m_isoBycle.m_strFile.c_str());
-
-		CBycleApp::GetPtr()->m_System.m_pDevice->getFileSystem()->changeWorkingDirectoryTo(strOldPath.c_str());
-	}
-	else
-	{
-		ggf::irr_util::DebugOutputFmt(NULL,"%s node alraedy exist \n",stageRes.m_isoBycle.m_strMainObjNodeName.c_str());
-	}*/
+	}	
 
 	m_pSpawnNode = CBycleApp::Get().m_System.m_pSmgr->getSceneNodeFromName(stageRes.m_strSpawnPoint.c_str());
 	if(!m_pSpawnNode)
@@ -497,7 +484,6 @@ void CGameFrame::LoadRes()
 	{
 		// Initialize bullet physics world(discret dynamics)		
 		{
-			m_pBulletPhysicsFactory = new scene::CBulletAnimatorManager(pSmgr);
 			m_pWorldNode = pSmgr->addEmptySceneNode();
 			m_pWorldNode->setName("WorldNode");
 			//  기본중력 -9.8f
@@ -507,18 +493,15 @@ void CGameFrame::LoadRes()
 			//루트애니매이터
 			//irr::scene::CBulletWorldAnimator* bulletWorldAnimator = 
 			m_pWorldAnimator =
-				m_pBulletPhysicsFactory->createBulletWorldAnimator(
+				CBycleApp::GetPtr()->m_pBulletPhysicsFactory->createBulletWorldAnimator(
 				pSmgr,
 				m_pWorldNode,
 				&worldParams
 				);
+
 			//중력은 기본으로 y 축으로 -9.8
 			//m_pWorldAnimator->setGravity(irr::core::vector3df(0,-9.8,0));
-			m_pWorldNode->addAnimator(m_pWorldAnimator);	
-
-			//드랍을 잊지말자
-			m_pBulletPhysicsFactory->drop();
-			m_pWorldAnimator->drop();
+			m_pWorldNode->addAnimator(m_pWorldAnimator);				
 		}		
 		
 		//길
@@ -530,8 +513,7 @@ void CGameFrame::LoadRes()
 				Octree2Bullet(pRoadRoot);
 
 				//물리 씬노드 등록해주기
-				irr::core::list<irr::scene::ISceneNode *>::ConstIterator it = pRoadRoot->getChildren().begin();
-				
+				irr::core::list<irr::scene::ISceneNode *>::ConstIterator it = pRoadRoot->getChildren().begin();				
 				recursivePhysicsReg(pSmgr,m_pWorldAnimator->getID(),(*it));
 			}
 		}
@@ -643,23 +625,6 @@ bool CGameFrame::OnEvent(irr::SEvent ev)
 	{
 		if(ev.MouseInput.Event == EMIE_LMOUSE_PRESSED_DOWN)
 		{
-			/*
-			irr::core::position2di mouse_pos = CBycleApp::m_System.m_pDevice->getCursorControl()->getPosition();
-
-			irr::core::line3df Ray;		
-			irr::core::triangle3df triangle;
-
-			Ray = CBycleApp::m_System.m_pSmgr->getSceneCollisionManager()->getRayFromScreenCoordinates(mouse_pos);
-
-			if (CBycleApp::m_System.m_pSmgr->getSceneCollisionManager()->getCollisionPoint(
-				Ray, 
-				m_pmsTestObject, Ray.end, triangle))
-			{
-//				m_obj_백수인간.SetStatus(CObj_서성이는사람::ST_STAND,NULL);
-				//ggf::irr_util::DebugOutputFmt(NULL,"colii\n");
-			}
-			*/
-
 		}
 	}
 	else if(ev.EventType == irr::EET_GUI_EVENT)
