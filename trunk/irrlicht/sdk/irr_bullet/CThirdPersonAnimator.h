@@ -99,6 +99,11 @@ namespace scene
 			baseDir = m_vBaseDir;
 		}
 
+		virtual ISceneNodeAnimator* createClone(ISceneNode* node, ISceneManager* newManager=0)
+		{
+			return 0;
+		}
+
 	private:
 
 		ISceneNode *Target;		
