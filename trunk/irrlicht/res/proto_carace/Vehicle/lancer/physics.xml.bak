@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="ks_c_5601-1987" ?>
+
+<root>
+  <header type="DB_VehiclePhysics" name="lancer" 
+			MaxSpeed="250" ResistForce="0.1" EngineForce="1000" BreakForce="200" 
+			SteeringLimit="0.12" modelscale="0.078,0.078,0.078"
+			/>
+	<body Accel="front" wheelNum="4" size="5.5,0.4,9.5" 
+		mass="300" centerOfMass="0,-1,0" model="body.X"
+		/>
+
+
+  <!--
+	<header type="DB_VehiclePhysics" name="lancer" MaxSpeed="250" EngineForce="300000" BreakForce="100" SteeringLimit="0.12" modelscale="0.078,0.078,0.078"/>
+	<body Accel="full" wheelNum="4" size="5.5,0.4,9.5" mass="1000" centerOfMass="0,-1,0" model="body.X"/>
+	-->
+	
+	<suspension Stiffness="7" Damping="1.5" Compression="1.8" RestLength="0.15" />
+	<suspension Stiffness="8" Damping="2" Compression="1.9" RestLength="0.15" />
+	
+	<wheelFR pos="2.05,0.2,3.2" Radius="0.85" width="2" friction="400" rollInfluence="0.3" suspension="0" model="FLT.X" />
+	<wheelFL pos="-2.05,0.2,3.2" Radius="0.85" width="2" friction="400" rollInfluence="0.3" suspension="0" model="FRT.X" />
+	<wheelRR pos="2.05,0.2,-3.35" Radius="0.85" width="2" friction="500" rollInfluence="0.3" suspension="0" model="RLT.X" />
+	<wheelRL pos="-2.05,0.2,-3.35" Radius="0.85" width="2" friction="500" rollInfluence="0.3" suspension="0" model="RRT.X" />
+	
+</root>

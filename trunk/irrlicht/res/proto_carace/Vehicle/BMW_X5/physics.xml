@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="ks_c_5601-1987" ?>
+
+<root>
+
+	<header type="DB_VehiclePhysics" name="bmw_x5" 
+			MaxSpeed="250" ResistForce="0.1" EngineForce="800" BreakForce="200" 
+			SteeringLimit="0.1" modelscale="0.09,0.09,0.09"
+			/>
+	<body Accel="front" wheelNum="4" size="3,1.0,12" 
+		mass="500" centerOfMass="0,-1,0" model="body.X"
+		/>
+		
+		<!--
+	<header type="DB_VehiclePhysics" name="bmw_x5" 
+	MaxSpeed="250" EngineForce="15000000" 
+	BreakForce="150" SteeringLimit="0.1" 
+	modelscale="0.09,0.09,0.09"/>
+	<body Accel="full" wheelNum="4" size="8,0.6,12" 
+	mass="1350" centerOfMass="0,-1,0" model="body.X"/>
+	-->
+
+
+	
+	
+	<suspension Stiffness="5" Damping="2" Compression="2.3" RestLength="0.45" />
+	<suspension Stiffness="5.1" Damping="2" Compression="2.3" RestLength="0.45" />
+
+	<wheelFR pos="2.5,0.1,4.5.35" Radius="1.2" width="3" friction="800" rollInfluence="0.3" suspension="0" model="FLT.X" />
+	<wheelFL pos="-2.5,0.1,4.5.35" Radius="1.2" width="3" friction="800" rollInfluence="0.3" suspension="0" model="FRT.X" />
+	<wheelRR pos="2.5,0.1,-4.1" Radius="1.2" width="3" friction="800" rollInfluence="0.3" suspension="1" model="RLT.X" />
+	<wheelRL pos="-2.5,0.1,-4.1" Radius="1.2" width="3" friction="800" rollInfluence="0.3" suspension="1" model="RRT.X" />
+	
+</root>
