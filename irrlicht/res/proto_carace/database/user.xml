@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="ks_c_5601-1987" ?>
+<root>	
+
+<users>
+	<entry id="Minkwan" passwd="1111" name="송민관" phone="011-9436-9590" birthday="1981-10-19" />	
+	<entry id="gbox" passwd="8086" name="이석준" phone="010-2040-0640" birthday="1971-5-23" />	
+</users>
+
+
+</root>	

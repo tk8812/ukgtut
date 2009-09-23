@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="ks_c_5601-1987" ?>
+
+<root>	
+
+	<main_frame>
+		<GUIID_LOGIN rect="356,457,800,600" />
+		<GUIID_LOGIN_USERLIST rect="0,0,128,64" />
+		<GUIID_LOGIN_OK rect="0,80,128,112" caption="login" />	
+		<GUIID_LOGIN_CANCEL rect="0,112,128,144" caption="Exit" />	
+	</main_frame>
+	
+	<GameMenu>
+		<GUIID_GAMEMENU rect="356,457,800,600" />
+		<GUIID_BTN_START rect="0,0,128,32" caption="Single Play" />
+		<GUIID_BTN_MULTI rect="0,32,128,64" caption="NetWork Play" />
+		<GUIID_BTN_EXIT rect="0,64,128,96" caption="Prev" />
+	</GameMenu>	
+	
+	<StageSelect>
+		<GUIID_STAGE_SELECT rect="16,470,800,600" />		
+		<GUIID_CMB_CAR_SEL rect="0,32,128,64" title_rect="0,0,128,32" 
+			caption="Select vechicle" 
+			/>
+		<GUIID_LIST_STAGE_SELECT rect="130,32,258,96" 
+			title_rect="128,0,256,128" 
+			caption="Select Stage"
+			/>
+		<GUIID_BTN_GAMESTART rect="356,0,484,32" caption="Start" />	
+		<GUIID_BTN_STAGE_SELECT_BACK rect="356,34,484,66" caption="Back" />
+		
+		
+	</StageSelect>
+
+</root>

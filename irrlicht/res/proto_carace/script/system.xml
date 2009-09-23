@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="ks_c_5601-1987" ?>
+
+<root>	
+	<Server ip="" port="1666" id="veast" pass="666" />
+	
+	<AppMode DebugMode="true"  GUITran="0" StartAppFrame="framelogo" >
+		<Screen size="800,600" FullScreen="false" Renderer="dx9" />	
+		<Resource name="bme" version="1" />	
+	</AppMode>
+	
+	
+	
+	<GamePlay>			
+		<Camera dist="18.0" lookAtpos="0,6,0" angle="0" followsensivity=".3" />
+		
+		<Vehicle file="./Vehicle/BMW_X5/" name="X5" />
+		<Vehicle file="./Vehicle/gallardo/" name="gallardo" />
+		<Vehicle file="./Vehicle/lancer/" name="lancer" />		
+
+	</GamePlay>	
+	
+	<!--00  -->	
+	<!--
+	<stage name="swiss" file_name="../res/stage01/world.xml">
+		<point_spot spawn="InitPoint" start="06_start" check="" finish="06_finishline" />		
+		<collision road="road" terrain="ground" wall="wall" />
+		<sound bgm="ophelia.mp3" />
+		<CIRRSceneObject name="BycleObj" main_node="Cycle01" file="../res/cycle/cycle01.xml" />		
+	</stage>
+	-->
+	
+	<!--01  -->	
+	<stage name="stage01" file_name="map/stage01/world.xml">
+		<point_spot spawn="InitPoint" start="06_start" check="" finish="06_finishline" />		
+		<collision road="road" terrain="ground" wall="wall" />
+		<sound bgm="ophelia.mp3" />
+		<CIRRSceneObject name="BycleObj" main_node="Cycle01" file="../res/cycle/cycle01.xml" />
+	</stage>	
+	
+	<stage name="stage02" file_name="map/stage02/world.xml">
+		<point_spot spawn="start" start="" check="" finish="finish_line" />		
+		<collision road="road" terrain="" wall="" />
+		<sound bgm="ophelia.mp3" />
+		<CIRRSceneObject name="" main_node="" file="" />
+	</stage>	
+		
+		<!--0번  joy stick mode-->	
+		<!--1번  -->	
+		<!--2번  -->	
+		<!--3번  -->	
+		<!--4번  -->	
+		<!--5번 디버그용 차량종류선택 -->	
+		<!--7번 debug stage number( 0 ~ n -->	
+		<!--8번 bgm off -->	
+		<!--9번 ni입력 모드-->	
+
+	<DEVTest int="0,0,0,0,1,0,0,1,1,0" float="10.0,0,0" />
+	
+</root>
