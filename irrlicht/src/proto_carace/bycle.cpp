@@ -504,12 +504,18 @@ int CBycleApp::Create(char *szResName)
 		m_System.m_pSmgr   = m_System.m_pDevice->getSceneManager();				
 		ggf::irr_util::DebugOutputFmt(NULL,"Render Engine Successed....\n");
 
-		//플러그인설치
+		//사용자 추가 확장 씬노드 펙토리등록
 		{
 			irr::scene::jz3d::CJZ3DSceneNodeFactory *factory =
 				new irr::scene::jz3d::CJZ3DSceneNodeFactory(m_System.m_pSmgr);
 			m_System.m_pSmgr->registerSceneNodeFactory(factory);
 			factory->drop();	
+		}
+
+		//물리 애니메이터 펙토리등록
+		{
+			
+			m_pBulletPhysicsFactory = new irr::scene::CBulletAnimatorManager(m_System.m_pSmgr);
 		}
 
 
@@ -839,9 +845,6 @@ void CBycleApp::MainLoop()
 	{
 		FreeDirectInput();
 	}
-
-
-
 }
 
 bool CBycleApp::InitNiIO()

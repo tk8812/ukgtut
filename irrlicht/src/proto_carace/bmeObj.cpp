@@ -868,7 +868,7 @@ bool CObj_ThisBycle::IsMissionComplete()
 
 			convexConvex.getClosestPoints(input, gjkOutput, 0);
 
-			ggf::irr_util::DebugOutputFmt(NULL,"%f \n",gjkOutput.m_distance);
+			//ggf::irr_util::DebugOutputFmt(NULL,"%f \n",gjkOutput.m_distance);
 
 			if(gjkOutput.m_distance <= 0)
 				return true;
