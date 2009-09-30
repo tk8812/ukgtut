@@ -67,9 +67,14 @@ bool CHeroPlayer::Init(irr::scene::ISceneNode *pNode)
 				&physicsParams
 				);
 
+			
+
 			pCamNode->addAnimator(pAnim);	
 			m_pChracterAnimator = pAnim;	
 			pAnim->drop();
+
+			//카메라에 캐릭터 노드 붙이기
+			m_pNode->setParent(pCamNode);
 		}
 		return true;
 	}
