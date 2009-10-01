@@ -47,6 +47,8 @@ bool CHeroPlayer::Init(irr::scene::ISceneNode *pNode)
 		m_pTrigerNode = pSmgr->getSceneNodeFromName("usr/triger");
 
 		{
+			irr::scene::ISceneNode *eyeNode = (irr::scene::jz3d::CCollusionMngNode *)pSmgr->getSceneNodeFromName("eye",m_pNode);
+			irr::scene::ISceneNode *BodyNode = (irr::scene::jz3d::CCollusionMngNode *)pSmgr->getSceneNodeFromName("body",m_pNode);
 			m_pCollMngNode = (irr::scene::jz3d::CCollusionMngNode *)pSmgr->getSceneNodeFromName("col_main",m_pNode);//캐릭터볼륨얻기(이동제어용)
 			//m_pCollMngNode_Kick = (irr::scene::jz3d::CCollusionMngNode *)pSmgr->getSceneNodeFromName("col_kick",m_pNode); //발차기 충돌정보
 			//m_pCollMngNode_Body = (irr::scene::jz3d::CCollusionMngNode *)pSmgr->getSceneNodeFromName("col_body",m_pNode); //몸통 충돌정보		
@@ -73,8 +75,11 @@ bool CHeroPlayer::Init(irr::scene::ISceneNode *pNode)
 			m_pChracterAnimator = pAnim;	
 			pAnim->drop();
 
-			//카메라에 캐릭터 노드 붙이기
+			//카메라에 캐릭터 노드 붙이기			
 			m_pNode->setParent(pCamNode);
+			BodyNode->setPosition(BodyNode->getPosition() - eyeNode->getPosition()); //눈을 기준으로 무기의 위치 잡아주기
+			m_pChracterAnimator->setLocalPosition(eyeNode->getPosition());//눈의 위치 재조정
+			
 		}
 		return true;
 	}
@@ -98,47 +103,55 @@ void CHeroPlayer::Update(irr::f32 fDelta)
 	{
 	case CHeroPlayer::FSM_READY:
 		{
-			//시작위치 지정
-			//m_pNode->setVisible(true);			
+			//시작위치 지정			
+			m_pNode->setVisible(true);			
 			irr::core::vector3df pos_Spwan = pSmgr->getSceneNodeFromName("start",m_pTrigerNode)->getAbsolutePosition();
 			m_pChracterAnimator->setPosition(pos_Spwan);
 			m_pChracterAnimator->zeroForces();
-			m_pChracterAnimator->setLocalPosition(irr::core::vector3df(0,5,0));
+			//m_pChracterAnimator->setLocalPosition(irr::core::vector3df(0,5,0));
 			//m_pChracterAnimator->setMoveSpeed(1.1f);			
 
+			
 			SetStatus(FSM_STAND);
 		}
 		break;
 	case CHeroPlayer::FSM_STAND:
 		{
-						
-			if( m_Key[irr::KEY_LBUTTON] )
+			if(GetStep() == 0)
 			{
-				irr::scene::ISceneManager *pSmgr = pDevice->getSceneManager();
-				irr::core::position2di mpos = pDevice->getCursorControl()->getPosition();				
+				m_pNode->changeAction("stand");		
+				IncStep();
+			}
+			else
+			{
+				if( m_Key[irr::KEY_LBUTTON] )
+				{
+					irr::scene::ISceneManager *pSmgr = pDevice->getSceneManager();
+					irr::core::position2di mpos = pDevice->getCursorControl()->getPosition();				
 
-				irr::core::line3df Ray;
-				irr::core::vector3df vAim;
+					irr::core::line3df Ray;
+					irr::core::vector3df vAim;
 
-				Ray = pDevice->getSceneManager()->getSceneCollisionManager()->getRayFromScreenCoordinates(mpos);
+					Ray = pDevice->getSceneManager()->getSceneCollisionManager()->getRayFromScreenCoordinates(mpos);
 
-				vAim = Ray.getVector();
-				vAim.normalize(); 	
+					vAim = Ray.getVector();
+					vAim.normalize(); 	
 
-				ChsBullet *pBullet = new ChsBullet();
+					ChsBullet *pBullet = new ChsBullet();
 
-				ChsBullet::Params param_bullet;
+					ChsBullet::Params param_bullet;
 
-				param_bullet.Energy = 10.f;
-				param_bullet.mass = .1f;
-				param_bullet.vAim = vAim;				
-				param_bullet.vInitPos = getPosition() + (irr::core::vector3df(0,5,0) + vAim * 3); //총구 위치 적용된 발사시작위치
-				
-				pBullet->Init(&param_bullet); //총알 초기화
+					param_bullet.Energy = 10.f;
+					param_bullet.mass = .1f;
+					param_bullet.vAim = vAim;				
+					param_bullet.vInitPos = getPosition() + (irr::core::vector3df(0,5,0) + vAim * 3); //총구 위치 적용된 발사시작위치
 
-				m_mapBullets[pBullet->m_pAnim->getRigidBody()] = SP_IFSMObject(pBullet);
+					pBullet->Init(&param_bullet); //총알 초기화
 
-				m_Key[irr::KEY_LBUTTON] = false;
+					m_mapBullets[pBullet->m_pAnim->getRigidBody()] = SP_IFSMObject(pBullet);
+
+					m_Key[irr::KEY_LBUTTON] = false;
+				}
 			}
 		}		
 		break;
