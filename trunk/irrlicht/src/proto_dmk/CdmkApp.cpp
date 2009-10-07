@@ -224,6 +224,9 @@ bool CdmkApp::Init()
 		CAIPlayer *pPlayer = new CAIPlayer();		
 		m_spZombie1 = SP_PLAYER(pPlayer);
 
+		//원본은 일단 안보이게 숨기기
+		m_pSmgr->getSceneNodeFromName("usr/obj/b3d/zombie/1")->setVisible(false);
+
 		irr::scene::ISceneNode *pNode = m_pSmgr->getSceneNodeFromName("usr/obj/b3d/zombie/1")->clone();
 
 		if( pNode && pPlayer->Init(pNode) != true)

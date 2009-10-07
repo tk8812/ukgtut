@@ -124,12 +124,12 @@ void CHeroPlayer::Update(irr::f32 fDelta)
 			if(m_Key[irr::KEY_RIGHT] ) {
 				angle = 270;
 				//speed = 2.0f;
-				WalkVelocity = btVector3(1.0,0.0f,0.f) * speed;;
+				WalkVelocity = btVector3(1.0,0.0f,0.f) * speed;
 			}
 
 			if(WalkVelocity.length() == 0)
 			{
-				angle = m_pChracterAnimator->getBodyFrontAngle();// * irr::core::RADTODEG;//.getHorizontalAngle().Y;			
+				angle = m_pChracterAnimator->getBodyFrontAngle();// * irr::core::RADTODEG;//.getHorizontalAngle().Y;
 				SetStatus(FSM_STAND);
 			}			
 			
