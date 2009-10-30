@@ -141,7 +141,7 @@ void CHeroPlayer::Update(irr::f32 fDelta)
 
 					ChsBullet::Params param_bullet;
 
-					param_bullet.Energy = 10.f;
+					param_bullet.Energy = 100.f;
 					param_bullet.mass = .1f;
 					param_bullet.vAim = vAim;				
 					param_bullet.vInitPos = getPosition() + (irr::core::vector3df(0,5,0) + vAim * 3); //총구 위치 적용된 발사시작위치
@@ -150,7 +150,7 @@ void CHeroPlayer::Update(irr::f32 fDelta)
 
 					m_mapBullets[pBullet->m_pAnim->getRigidBody()] = SP_IFSMObject(pBullet);
 
-					m_Key[irr::KEY_LBUTTON] = false;
+					m_Key[irr::KEY_LBUTTON] = false;					
 				}
 			}
 		}		
@@ -194,7 +194,9 @@ void CHeroPlayer::Update(irr::f32 fDelta)
 					if(obA == pTar || obB == pTar)
 					{
 						CSAApp::Get().m_spZombie1->Signal("hit",pBullet);
-					}					
+					}
+
+					std::cout << "current bullet num :" << m_mapBullets.size() << std::endl;
 				}
 			}
 

@@ -255,6 +255,8 @@ void CSAApp::Update()
 		swprintf(wszbuf,L"Frame rate : %d\n TriAngle: %d",m_pVideo->getFPS(),
 			m_pVideo->getPrimitiveCountDrawn());			
 		m_pGuiEnv->getRootGUIElement()->getElementFromId(100)->setText(wszbuf);
+
+		
 	}
 
 	//霸烙肺流 & 拱府 & 备面倒贸府
