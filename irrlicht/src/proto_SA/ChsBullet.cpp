@@ -49,7 +49,7 @@ int ChsBullet::Init(void *pParam)
 
 		pAnim->applyImpulse(pbulletPram->Energy * pbulletPram->vAim);
 		//터널링방지
-		pAnim->setCCD(1,.2f * (.05f));
+		pAnim->setCCD(.5f,.5f);
 		
 	
 		pNode->addAnimator(pAnim);					
@@ -94,6 +94,12 @@ void ChsBullet::Update(irr::f32 fTick)
 		}
 		break;
 	case ChsBullet::FSM_MOVE:
+		{
+			if(m_pAnim->getRigidBody()->getHitFraction() < 1.0f)
+			{
+				Signal("hit",NULL);				
+			}
+		}
 		break;
 	case ChsBullet::FSM_HIT:
 		if(GetStep() == 0)
