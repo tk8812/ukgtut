@@ -220,6 +220,7 @@ bool CdmkApp::Init()
 			return false;
 	}
 
+	//좀비
 	{
 		CAIPlayer *pPlayer = new CAIPlayer();		
 		m_spZombie1 = SP_PLAYER(pPlayer);
@@ -233,44 +234,10 @@ bool CdmkApp::Init()
 		{
 			return false;
 		}
-	}
-
-	////비고정 오브잭트추가
-	//{			
-	//	irr::scene::CBulletObjectAnimatorGeometry geom;
-	//	irr::scene::CBulletObjectAnimatorParams physicsParams;
-
-	//	irr::scene::ISceneNode *pNode = m_pSmgr->addCubeSceneNode(10.f);
-	//	pNode->setPosition(irr::core::vector3df(0,15,-2));
-	//	//pNode->setMaterialTexture(0,pVideo->getTexture("../res/irr_exam/t351sml.jpg"));
-	//	pNode->setMaterialFlag(irr::video::EMF_LIGHTING,false);
-	//	pNode->setMaterialFlag(irr::video::EMF_WIREFRAME,true);
-
-	//	geom.type = irr::scene::CBPAGT_BOX;
-	//	geom.box.X = 5.f;//.sphere.radius = radius;
-	//	geom.box.Y = 5.f;
-	//	geom.box.Z = 5.f;			
-
-	//	physicsParams.mass = 0.5f;
-	//	physicsParams.gravity = core::vector3df(0, 0, 0);
-	//	physicsParams.friction = .6f; //마찰값		
-
-
-	//	irr::scene::CBulletObjectAnimator *pAnim = m_pBulletPhysicsFactory->createBulletObjectAnimator(
-	//		m_pSmgr,
-	//		pNode,
-	//		m_pWorldAnimator->getID(),
-	//		&geom,
-	//		&physicsParams
-	//		);
-	//	pNode->addAnimator(pAnim);	
-	//	pAnim->drop();
-	//}
-	//
+	}	
 
 	irr::scene::ICameraSceneNode *pCam = m_pSmgr->addCameraSceneNode(0,irr::core::vector3df(0,18,-30),irr::core::vector3df(0,0,0));	
-
-
+	
 
 	//프레임 레이트 표시용 유아이
 	irr::gui::IGUIStaticText *pstextFPS = 
@@ -293,7 +260,7 @@ bool CdmkApp::OnEvent(const irr::SEvent &event)
 		//ggf::utils::RecursiveEvent(m_pSmgr->getRootSceneNode(),event);
 		
 	}
-	if(m_spHeroPlayer.get())
+	if(m_spHeroPlayer.get()) //주인공 오브잭트 에게만 이벤트 전달
 	{
 		((CHeroPlayer *)m_spHeroPlayer.get())->OnEvent(event);
 		

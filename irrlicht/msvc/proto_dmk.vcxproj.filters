@@ -1,0 +1,171 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+    <Filter Include="sdk">
+      <UniqueIdentifier>{c00643fb-0192-4154-a753-c36220531a18}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sdk\jz3d">
+      <UniqueIdentifier>{974a0022-8b14-4160-9f84-7f859d7f0712}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sdk\bulletAnimator">
+      <UniqueIdentifier>{0cb5a6e4-c37f-4437-8264-f591485d685e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sdk\ggf">
+      <UniqueIdentifier>{76b5711f-df06-4160-9637-490c0b33ef20}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\proto_dmk\AIPlayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\proto_dmk\CdmkApp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\proto_dmk\HeroPlayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\proto_dmk\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\proto_dmk\player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\irrEdit\source\plugins\jz3dplugins\BulletPhysicsObjectNode.cpp">
+      <Filter>sdk\jz3d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\irrEdit\source\plugins\jz3dplugins\CollusionMngPluginNode.cpp">
+      <Filter>sdk\jz3d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\irrEdit\source\plugins\jz3dplugins\EmptyPluginNode.cpp">
+      <Filter>sdk\jz3d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\irrEdit\source\plugins\jz3dplugins\FormatedAnimationNode.cpp">
+      <Filter>sdk\jz3d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\irrEdit\source\plugins\jz3dplugins\JZ3DSceneNodeFactory.cpp">
+      <Filter>sdk\jz3d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\irrEdit\source\plugins\jz3dplugins\Plan1x1SceneNode.cpp">
+      <Filter>sdk\jz3d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\irrEdit\source\plugins\jz3dplugins\TiledPlaneNode.cpp">
+      <Filter>sdk\jz3d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sdk\irr_bullet\BulletChracterAnimator.cpp">
+      <Filter>sdk\bulletAnimator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sdk\irr_bullet\BulletFpsCamAnimator.cpp">
+      <Filter>sdk\bulletAnimator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sdk\irr_bullet\CBulletAnimatorManager.cpp">
+      <Filter>sdk\bulletAnimator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sdk\irr_bullet\CBulletObjectAnimator.cpp">
+      <Filter>sdk\bulletAnimator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sdk\irr_bullet\CBulletPhysicsUtils.cpp">
+      <Filter>sdk\bulletAnimator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sdk\irr_bullet\CBulletWorldAnimator.cpp">
+      <Filter>sdk\bulletAnimator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sdk\ggfsdk\FrameMng.cpp">
+      <Filter>sdk\ggf</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\proto_dmk\AIPlayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\proto_dmk\CdmkApp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\proto_dmk\HeroPlayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\proto_dmk\Player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\irrEdit\source\plugins\jz3dplugins\BulletPhysicsObjectNode.h">
+      <Filter>sdk\jz3d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\irrEdit\source\plugins\jz3dplugins\CollusionMngPluginNode.h">
+      <Filter>sdk\jz3d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\irrEdit\source\plugins\jz3dplugins\EmptyPluginNode.h">
+      <Filter>sdk\jz3d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\irrEdit\source\plugins\jz3dplugins\FormatedAnimationNode.h">
+      <Filter>sdk\jz3d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\irrEdit\source\plugins\jz3dplugins\jz3d.h">
+      <Filter>sdk\jz3d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\irrEdit\source\plugins\jz3dplugins\JZ3DSceneNodeFactory.h">
+      <Filter>sdk\jz3d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\irrEdit\source\plugins\jz3dplugins\Plan1x1SceneNode.h">
+      <Filter>sdk\jz3d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\irrEdit\source\plugins\jz3dplugins\TiledPlaneNode.h">
+      <Filter>sdk\jz3d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sdk\irr_bullet\BulletChracterAnimator.h">
+      <Filter>sdk\bulletAnimator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sdk\irr_bullet\BulletFpsCamAnimator.h">
+      <Filter>sdk\bulletAnimator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sdk\irr_bullet\CBulletAnimatorManager.h">
+      <Filter>sdk\bulletAnimator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sdk\irr_bullet\CBulletObjectAnimator.h">
+      <Filter>sdk\bulletAnimator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sdk\irr_bullet\CBulletPhysicsUtils.h">
+      <Filter>sdk\bulletAnimator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sdk\irr_bullet\CBulletWorldAnimator.h">
+      <Filter>sdk\bulletAnimator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sdk\irr_bullet\CFollowAnimator.h">
+      <Filter>sdk\bulletAnimator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sdk\irr_bullet\CThirdPersonAnimator.h">
+      <Filter>sdk\bulletAnimator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sdk\irr_bullet\CThirdPersonFollowAnimator.h">
+      <Filter>sdk\bulletAnimator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sdk\ggfsdk\EsenFrame.h">
+      <Filter>sdk\ggf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sdk\ggfsdk\EsenObject.h">
+      <Filter>sdk\ggf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sdk\ggfsdk\FrameMng.h">
+      <Filter>sdk\ggf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sdk\ggfsdk\FSMObject.h">
+      <Filter>sdk\ggf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sdk\ggfsdk\Singleton.h">
+      <Filter>sdk\ggf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sdk\ggfsdk\util.h">
+      <Filter>sdk\ggf</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
