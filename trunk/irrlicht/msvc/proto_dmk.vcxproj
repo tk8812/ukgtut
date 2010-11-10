@@ -1,0 +1,156 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{79734E82-E4D8-4A5F-87B4-836FD1AC48E7}</ProjectGuid>
+    <RootNamespace>proto_dmk</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\sdk\Property Sheets\irrlicht.props" />
+    <Import Project="..\sdk\Property Sheets\JGAGenernal.props" />
+    <Import Project="..\sdk\Property Sheets\irr_bullet.props" />
+    <Import Project="..\sdk\Property Sheets\ggf.props" />
+    <Import Project="..\sdk\Property Sheets\irredit_plugin.props" />
+    <Import Project="..\sdk\Property Sheets\bullet_release.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\sdk\Property Sheets\bullet_debug.props" />
+    <Import Project="..\sdk\Property Sheets\irrlicht.props" />
+    <Import Project="..\sdk\Property Sheets\JGAGenernal.props" />
+    <Import Project="..\sdk\Property Sheets\irr_bullet.props" />
+    <Import Project="..\sdk\Property Sheets\ggf.props" />
+    <Import Project="..\sdk\Property Sheets\irredit_plugin.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration)\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\proto_dmk\AIPlayer.cpp" />
+    <ClCompile Include="..\src\proto_dmk\CdmkApp.cpp" />
+    <ClCompile Include="..\src\proto_dmk\HeroPlayer.cpp" />
+    <ClCompile Include="..\src\proto_dmk\main.cpp" />
+    <ClCompile Include="..\src\proto_dmk\player.cpp" />
+    <ClCompile Include="..\irrEdit\source\plugins\jz3dplugins\BulletPhysicsObjectNode.cpp" />
+    <ClCompile Include="..\irrEdit\source\plugins\jz3dplugins\CollusionMngPluginNode.cpp" />
+    <ClCompile Include="..\irrEdit\source\plugins\jz3dplugins\EmptyPluginNode.cpp" />
+    <ClCompile Include="..\irrEdit\source\plugins\jz3dplugins\FormatedAnimationNode.cpp" />
+    <ClCompile Include="..\irrEdit\source\plugins\jz3dplugins\JZ3DSceneNodeFactory.cpp" />
+    <ClCompile Include="..\irrEdit\source\plugins\jz3dplugins\Plan1x1SceneNode.cpp" />
+    <ClCompile Include="..\irrEdit\source\plugins\jz3dplugins\TiledPlaneNode.cpp" />
+    <ClCompile Include="..\sdk\irr_bullet\BulletChracterAnimator.cpp" />
+    <ClCompile Include="..\sdk\irr_bullet\BulletFpsCamAnimator.cpp" />
+    <ClCompile Include="..\sdk\irr_bullet\CBulletAnimatorManager.cpp" />
+    <ClCompile Include="..\sdk\irr_bullet\CBulletObjectAnimator.cpp" />
+    <ClCompile Include="..\sdk\irr_bullet\CBulletPhysicsUtils.cpp" />
+    <ClCompile Include="..\sdk\irr_bullet\CBulletWorldAnimator.cpp" />
+    <ClCompile Include="..\sdk\ggfsdk\FrameMng.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\proto_dmk\AIPlayer.h" />
+    <ClInclude Include="..\src\proto_dmk\CdmkApp.h" />
+    <ClInclude Include="..\src\proto_dmk\HeroPlayer.h" />
+    <ClInclude Include="..\src\proto_dmk\Player.h" />
+    <ClInclude Include="..\irrEdit\source\plugins\jz3dplugins\BulletPhysicsObjectNode.h" />
+    <ClInclude Include="..\irrEdit\source\plugins\jz3dplugins\CollusionMngPluginNode.h" />
+    <ClInclude Include="..\irrEdit\source\plugins\jz3dplugins\EmptyPluginNode.h" />
+    <ClInclude Include="..\irrEdit\source\plugins\jz3dplugins\FormatedAnimationNode.h" />
+    <ClInclude Include="..\irrEdit\source\plugins\jz3dplugins\jz3d.h" />
+    <ClInclude Include="..\irrEdit\source\plugins\jz3dplugins\JZ3DSceneNodeFactory.h" />
+    <ClInclude Include="..\irrEdit\source\plugins\jz3dplugins\Plan1x1SceneNode.h" />
+    <ClInclude Include="..\irrEdit\source\plugins\jz3dplugins\TiledPlaneNode.h" />
+    <ClInclude Include="..\sdk\irr_bullet\BulletChracterAnimator.h" />
+    <ClInclude Include="..\sdk\irr_bullet\BulletFpsCamAnimator.h" />
+    <ClInclude Include="..\sdk\irr_bullet\CBulletAnimatorManager.h" />
+    <ClInclude Include="..\sdk\irr_bullet\CBulletObjectAnimator.h" />
+    <ClInclude Include="..\sdk\irr_bullet\CBulletPhysicsUtils.h" />
+    <ClInclude Include="..\sdk\irr_bullet\CBulletWorldAnimator.h" />
+    <ClInclude Include="..\sdk\irr_bullet\CFollowAnimator.h" />
+    <ClInclude Include="..\sdk\irr_bullet\CThirdPersonAnimator.h" />
+    <ClInclude Include="..\sdk\irr_bullet\CThirdPersonFollowAnimator.h" />
+    <ClInclude Include="..\sdk\ggfsdk\EsenFrame.h" />
+    <ClInclude Include="..\sdk\ggfsdk\EsenObject.h" />
+    <ClInclude Include="..\sdk\ggfsdk\FrameMng.h" />
+    <ClInclude Include="..\sdk\ggfsdk\FSMObject.h" />
+    <ClInclude Include="..\sdk\ggfsdk\Singleton.h" />
+    <ClInclude Include="..\sdk\ggfsdk\util.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
