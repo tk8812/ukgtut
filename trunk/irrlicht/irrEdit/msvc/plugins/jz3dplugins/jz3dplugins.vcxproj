@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{55242312-CE48-472B-9F41-63D2D8CCEB14}</ProjectGuid>
+    <RootNamespace>jz3dplugins</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\editpulgin_rel.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\editpulgin.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../temp/$(ProjectName)/$(Configuration)\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration)\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;JZ3DPLUGINS_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;JZ3DPLUGINS_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\source\plugins\jz3dplugins\BulletPhysicsObjectNode.cpp" />
+    <ClCompile Include="..\..\..\source\plugins\jz3dplugins\CollusionMngPluginNode.cpp" />
+    <ClCompile Include="..\..\..\source\plugins\jz3dplugins\EmptyPluginNode.cpp" />
+    <ClCompile Include="..\..\..\source\plugins\jz3dplugins\FormatedAnimationNode.cpp" />
+    <ClCompile Include="..\..\..\source\plugins\jz3dplugins\JZ3DSceneNodeFactory.cpp" />
+    <ClCompile Include="..\..\..\source\plugins\jz3dplugins\main.cpp" />
+    <ClCompile Include="..\..\..\source\plugins\jz3dplugins\Plan1x1SceneNode.cpp" />
+    <ClCompile Include="..\..\..\source\plugins\jz3dplugins\TiledPlaneNode.cpp" />
+    <ClCompile Include="..\..\..\..\sdk\irr_bullet\BulletChracterAnimator.cpp" />
+    <ClCompile Include="..\..\..\..\sdk\irr_bullet\BulletFpsCamAnimator.cpp" />
+    <ClCompile Include="..\..\..\..\sdk\irr_bullet\CBulletAnimatorManager.cpp" />
+    <ClCompile Include="..\..\..\..\sdk\irr_bullet\CBulletObjectAnimator.cpp" />
+    <ClCompile Include="..\..\..\..\sdk\irr_bullet\CBulletPhysicsUtils.cpp" />
+    <ClCompile Include="..\..\..\..\sdk\irr_bullet\CBulletWorldAnimator.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\source\plugins\jz3dplugins\BulletPhysicsObjectNode.h" />
+    <ClInclude Include="..\..\..\source\plugins\jz3dplugins\CollusionMngPluginNode.h" />
+    <ClInclude Include="..\..\..\source\plugins\jz3dplugins\EmptyPluginNode.h" />
+    <ClInclude Include="..\..\..\source\plugins\jz3dplugins\FormatedAnimationNode.h" />
+    <ClInclude Include="..\..\..\source\plugins\jz3dplugins\jz3d.h" />
+    <ClInclude Include="..\..\..\source\plugins\jz3dplugins\JZ3DSceneNodeFactory.h" />
+    <ClInclude Include="..\..\..\source\plugins\jz3dplugins\Plan1x1SceneNode.h" />
+    <ClInclude Include="..\..\..\source\plugins\jz3dplugins\TiledPlaneNode.h" />
+    <ClInclude Include="..\..\..\..\sdk\irr_bullet\BulletChracterAnimator.h" />
+    <ClInclude Include="..\..\..\..\sdk\irr_bullet\BulletFpsCamAnimator.h" />
+    <ClInclude Include="..\..\..\..\sdk\irr_bullet\CBulletAnimatorManager.h" />
+    <ClInclude Include="..\..\..\..\sdk\irr_bullet\CBulletObjectAnimator.h" />
+    <ClInclude Include="..\..\..\..\sdk\irr_bullet\CBulletPhysicsUtils.h" />
+    <ClInclude Include="..\..\..\..\sdk\irr_bullet\CBulletWorldAnimator.h" />
+    <ClInclude Include="..\..\..\..\sdk\irr_bullet\CFollowAnimator.h" />
+    <ClInclude Include="..\..\..\..\sdk\irr_bullet\CThirdPersonAnimator.h" />
+    <ClInclude Include="..\..\..\..\sdk\irr_bullet\CThirdPersonFollowAnimator.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
