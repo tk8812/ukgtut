@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "proto_dmk", "proto_dmk.vcxproj", "{79734E82-E4D8-4A5F-87B4-836FD1AC48E7}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "animExam", "animExam\animExam.vcxproj", "{2802A83A-F152-46B3-84E9-CEAD2297E9A2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -13,6 +15,10 @@ Global
 		{79734E82-E4D8-4A5F-87B4-836FD1AC48E7}.Debug|Win32.Build.0 = Debug|Win32
 		{79734E82-E4D8-4A5F-87B4-836FD1AC48E7}.Release|Win32.ActiveCfg = Release|Win32
 		{79734E82-E4D8-4A5F-87B4-836FD1AC48E7}.Release|Win32.Build.0 = Release|Win32
+		{2802A83A-F152-46B3-84E9-CEAD2297E9A2}.Debug|Win32.ActiveCfg = Debug|Win32
+		{2802A83A-F152-46B3-84E9-CEAD2297E9A2}.Debug|Win32.Build.0 = Debug|Win32
+		{2802A83A-F152-46B3-84E9-CEAD2297E9A2}.Release|Win32.ActiveCfg = Release|Win32
+		{2802A83A-F152-46B3-84E9-CEAD2297E9A2}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

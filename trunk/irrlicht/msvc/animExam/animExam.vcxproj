@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{2802A83A-F152-46B3-84E9-CEAD2297E9A2}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>animExam</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalOptions>/I"../../sdk/irrlicht/include"
+/I"../../sdk/bullet/src"
+/I"../../sdk/irr_bullet"
+ 
+ 
+ 
+  %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalOptions>/LIBPATH:"../../sdk/irrlicht/lib/win32-visualstudio" irrlicht.lib
+/LIBPATH:"../../sdk/bullet/out/debug8/libs" 
+libbulletsoftbody_d.lib
+libbulletmath_d.lib
+libbulletdynamics_d.lib
+libbulletcollision_d.lib
+libconvexdecomposition_d.lib
+libGIMPACTUtils_d.lib 
+ 
+ %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\irrEdit\source\plugins\jz3dplugins\BulletPhysicsObjectNode.cpp" />
+    <ClCompile Include="..\..\irrEdit\source\plugins\jz3dplugins\CollusionMngPluginNode.cpp" />
+    <ClCompile Include="..\..\irrEdit\source\plugins\jz3dplugins\EmptyPluginNode.cpp" />
+    <ClCompile Include="..\..\irrEdit\source\plugins\jz3dplugins\FormatedAnimationNode.cpp" />
+    <ClCompile Include="..\..\irrEdit\source\plugins\jz3dplugins\JZ3DSceneNodeFactory.cpp" />
+    <ClCompile Include="..\..\irrEdit\source\plugins\jz3dplugins\Plan1x1SceneNode.cpp" />
+    <ClCompile Include="..\..\irrEdit\source\plugins\jz3dplugins\TiledPlaneNode.cpp" />
+    <ClCompile Include="..\..\sdk\irr_bullet\BulletChracterAnimator.cpp" />
+    <ClCompile Include="..\..\sdk\irr_bullet\BulletFpsCamAnimator.cpp" />
+    <ClCompile Include="..\..\sdk\irr_bullet\CBulletAnimatorManager.cpp" />
+    <ClCompile Include="..\..\sdk\irr_bullet\CBulletObjectAnimator.cpp" />
+    <ClCompile Include="..\..\sdk\irr_bullet\CBulletPhysicsUtils.cpp" />
+    <ClCompile Include="..\..\sdk\irr_bullet\CBulletWorldAnimator.cpp" />
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\irrEdit\source\plugins\jz3dplugins\BulletPhysicsObjectNode.h" />
+    <ClInclude Include="..\..\irrEdit\source\plugins\jz3dplugins\CollusionMngPluginNode.h" />
+    <ClInclude Include="..\..\irrEdit\source\plugins\jz3dplugins\EmptyPluginNode.h" />
+    <ClInclude Include="..\..\irrEdit\source\plugins\jz3dplugins\FormatedAnimationNode.h" />
+    <ClInclude Include="..\..\irrEdit\source\plugins\jz3dplugins\jz3d.h" />
+    <ClInclude Include="..\..\irrEdit\source\plugins\jz3dplugins\JZ3DSceneNodeFactory.h" />
+    <ClInclude Include="..\..\irrEdit\source\plugins\jz3dplugins\Plan1x1SceneNode.h" />
+    <ClInclude Include="..\..\irrEdit\source\plugins\jz3dplugins\TiledPlaneNode.h" />
+    <ClInclude Include="..\..\sdk\irr_bullet\BulletChracterAnimator.h" />
+    <ClInclude Include="..\..\sdk\irr_bullet\BulletFpsCamAnimator.h" />
+    <ClInclude Include="..\..\sdk\irr_bullet\CBulletAnimatorManager.h" />
+    <ClInclude Include="..\..\sdk\irr_bullet\CBulletObjectAnimator.h" />
+    <ClInclude Include="..\..\sdk\irr_bullet\CBulletPhysicsUtils.h" />
+    <ClInclude Include="..\..\sdk\irr_bullet\CBulletWorldAnimator.h" />
+    <ClInclude Include="..\..\sdk\irr_bullet\CFollowAnimator.h" />
+    <ClInclude Include="..\..\sdk\irr_bullet\CThirdPersonAnimator.h" />
+    <ClInclude Include="..\..\sdk\irr_bullet\CThirdPersonFollowAnimator.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
